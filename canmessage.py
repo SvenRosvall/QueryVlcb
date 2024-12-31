@@ -43,6 +43,9 @@ class canmessage:
     def is_short_event(self) -> bool:
         return True if self.is_event() and self.data[0] & (1 << 3) else False
 
+    def get_op_code(self) -> int:
+        return self.data[0]
+
     def get_node_number(self) -> int:
         return (self.data[1] << 8) + (self.data[2] & 0xff)
 
