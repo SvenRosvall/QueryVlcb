@@ -530,7 +530,6 @@ VlcbParamFlags = {
   16 : "COE", # Module can consume its own events
   32 : "LRN", # Module is in learn mode
   64 : "VLCB", # Module is VLCB compatible
-  64 : "SD", # Module supports Service Discovery (Deprecated in favour of PF_VLCB.)
 }
 
 VlcbModeParams = {

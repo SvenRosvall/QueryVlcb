@@ -20,7 +20,9 @@ def moduleName(id: int):
         return "Unknown"
 
 def flags(f: int):
-    return "-"
+    return ' '.join([VlcbParamFlags[bitvalue]
+                     for bitvalue in [1<<bit for bit in range(8)]
+                     if (f & bitvalue) != 0])
 
 def showCbusMessage(canFrame: canmessage):
     if canFrame.data[0] == OPC_PNN :
