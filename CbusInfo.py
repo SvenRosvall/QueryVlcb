@@ -13,11 +13,10 @@ def manufacturerName(id: int):
         return "Unknown"
 
 def moduleName(id: int):
-    name = VlcbMergModuleTypes[id]
-    if name:
-        return name
+    if id in VlcbMergModuleTypes:
+        return VlcbMergModuleTypes[id]
     else:
-        return "Unknown"
+        return f"Unknown({id})"
 
 def flags(f: int):
     return ' '.join([VlcbParamFlags[bitvalue]
