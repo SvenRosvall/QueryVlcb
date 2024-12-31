@@ -1,6 +1,6 @@
 from canmessage import canmessage
 
-def CANtoGC(self, msg: canmessage.canmessage) -> str:
+def CANtoGC(msg: canmessage) -> str:
     tid = msg.canid << 5
 
     gc = ':'
@@ -13,10 +13,10 @@ def CANtoGC(self, msg: canmessage.canmessage) -> str:
     gc += ';'
     return gc
 
-def GCtoCAN(self, gc: str) -> canmessage.canmessage | None:
+def GCtoCAN(gc: str) -> canmessage:
     # self.logger.log(f'** GCtoCAN {gc}')
     try:
-        msg = canmessage.canmessage()
+        msg = canmessage()
         msg.ext = True if (gc[1] == 'X') else False
         pos = gc.find('N')
 
@@ -26,21 +26,21 @@ def GCtoCAN(self, gc: str) -> canmessage.canmessage | None:
         else:
             msg.rtr = False
 
-        id = '0X' + gc[2:pos]
-        msg.canid = int(id) >> 5
+        id = gc[2:pos]
+        msg.canid = int(id, 16) >> 5
 
-        data = gc[pos + 1: -1]
+        data = gc[pos + 1:]
         msg.dlc = int(len(data) / 2)
 
         for i in range(msg.dlc):
             j = int(i)
-            t = '0x' + data[j * 2: (j * 2) + 2]
-            msg.data[i] = int(t)
+            t = data[j * 2: (j * 2) + 2]
+            msg.data[i] = int(t, 16)
 
-        # self.logger.log('convert ok')
+        #print('convert ok')
 
     except:
-        # self.logger.log('** GCtoCAN invalid string')
+        print('** GCtoCAN invalid string')
         msg = None
 
     return msg

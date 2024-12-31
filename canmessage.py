@@ -1,7 +1,6 @@
 
 class canmessage:
     def __init__(self, canid: int = 0, dlc: int = 0, data=bytearray(8), rtr: bool = False, ext: bool = False):
-        self.logger = logger.logger()
         self.canid = canid
         self.make_header()
         self.dlc = dlc
@@ -58,24 +57,14 @@ class canmessage:
         ext = "X" if self.ext else ""
 
         if hex_fmt:
-            print(
-                f"[{self.canid:x}] [{self.dlc:x}] "
-                + "[ "
-                + " ".join("{:02x}".format(x) for x in self.data[:self.dlc])
-                + " ] "
-                + rtr
-                + ext,
-                end="",
-                )
+            byteFormat="{:02X}"
         else:
-            print(
-                f"[{self.canid}] [{self.dlc}] "
-                + "[ "
-                + " ".join("{:02}".format(x) for x in self.data[:self.dlc])
-                + " ] "
-                + rtr
-                + ext,
-                end="",
-                )
-
-        print()
+            byteFormat="{:02}"
+        print(
+            f"[{self.canid:x}] [{self.dlc:x}] "
+            + "[ "
+            + " ".join(byteFormat.format(x) for x in self.data[:self.dlc])
+            + " ] "
+            + rtr
+            + ext
+        )
