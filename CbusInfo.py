@@ -1,18 +1,21 @@
 from vlcbdefs import *
+from vlcbdictionaries import *
 from canmessage import canmessage
 
 def nodeNumber(h: int, l:int):
     return (h<<8) + l
 
 def manufacturerName(id: int):
-    if id == MANU_MERG:
-        return "MERG"
+    manu = VlcbManufacturer[id]
+    if manu:
+        return manu
     else:
         return "Unknown"
 
 def moduleName(id: int):
-    if id == MTYP_CANCMD:
-        return "CANCMD"
+    name = VlcbMergModuleTypes[id]
+    if name:
+        return name
     else:
         return "Unknown"
 
@@ -27,4 +30,4 @@ def showCbusMessage(canFrame: canmessage):
               " Flags=", flags(canFrame.data[5]),
               sep='')
     else:
-        print("Unknown OP code")
+        print("Unsupported OP code:", canFrame.data[0], VlcbOpCodes[canFrame.data[0]])
