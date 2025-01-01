@@ -15,7 +15,6 @@ class CbusServerConnection:
     def askRaw(self, gcFrame):
         self.sock.send(gcFrame.encode())
 
-        responses=[]
         gcMessage = ''
         startTime = time.time()
         while time.time() < startTime + 1.0:
@@ -34,8 +33,6 @@ class CbusServerConnection:
 
                 if c == ';': # End of CAN frame
                     #print("Got a CAN Frame:", gcMessage)
-                    responses.append(GCtoCAN(gcMessage))
+                    yield GCtoCAN(gcMessage)
 
                 gcMessage += c
-
-        return responses
