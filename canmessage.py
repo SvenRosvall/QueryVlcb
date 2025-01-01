@@ -1,12 +1,14 @@
 
 class canmessage:
-    def __init__(self, canid: int = 0, dlc: int = 0, data=bytearray(8), rtr: bool = False, ext: bool = False):
+    def __init__(self, canid: int = 0, dlc: int = -1, data = [], rtr: bool = False, ext: bool = False):
         self.canid = canid
         self.make_header()
         self.dlc = dlc
         self.data = bytearray(data)
         self.rtr = rtr
         self.ext = ext
+        if self.dlc == -1:
+            self.dlc = len(data)
 
     def __str__(self):
         rtr = "R" if self.rtr else ""
