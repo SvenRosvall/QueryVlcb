@@ -12,6 +12,9 @@ class CbusServerConnection:
             exit(1)
         self.sock.settimeout(1.0)
 
+    def askMessage(self, canMessage : canmessage):
+        return self.askRaw(CANtoGC(canMessage))
+
     def askRaw(self, gcFrame):
         self.sock.send(gcFrame.encode())
 
