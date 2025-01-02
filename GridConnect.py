@@ -14,28 +14,22 @@ def CANtoGC(msg: canmessage) -> str:
     return gc
 
 def GCtoCAN(gc: str) -> canmessage:
-    # self.logger.log(f'** GCtoCAN {gc}')
-    try:
-        ext = True if (gc[1] == 'X') else False
+    ext = True if (gc[1] == 'X') else False
 
-        pos = gc.find('N')
-        if pos == -1:
-            rtr = True
-            pos = gc.find('R')
-        else:
-            rtr = False
+    pos = gc.find('N')
+    if pos == -1:
+        rtr = True
+        pos = gc.find('R')
+    else:
+        rtr = False
 
-        canid = int(gc[2:pos], 16) >> 5
+    canid = int(gc[2:pos], 16) >> 5
 
-        data = gc[pos + 1:]
-        datalen = int((len(gc) - pos) / 2)
-        bytedata = [ int(data[i * 2: (i * 2) + 2], 16) for i in range(datalen)]
+    data = gc[pos + 1:]
+    datalen = int((len(gc) - pos) / 2)
+    bytedata = [ int(data[i * 2: (i * 2) + 2], 16) for i in range(datalen)]
 
-        msg = canmessage(canid=canid, ext=ext, rtr=rtr, data = bytedata)
-        #print('convert ok')
-
-    except:
-        print('** GCtoCAN invalid string')
-        msg = None
+    msg = canmessage(canid=canid, ext=ext, rtr=rtr, data = bytedata)
+    #print('convert ok')
 
     return msg
