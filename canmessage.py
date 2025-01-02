@@ -9,6 +9,8 @@ class canmessage:
         self.ext = ext
         if self.dlc == -1:
             self.dlc = len(data)
+        if len(data) != (data[0] >> 5) + 1:
+            raise ValueError(f"Incorrect number of data bytes ({len(data)}) for opcode {data[0]:X}")
 
     def __str__(self):
         rtr = "R" if self.rtr else ""
