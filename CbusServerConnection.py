@@ -30,6 +30,8 @@ class CbusServerConnection:
             #print("Got some data: ", data)
 
             for c in data.decode():
+                gcMessage += c
+
                 if c == ':': # Start of new CAN frame
                     gcMessage = ''
                     continue
@@ -37,5 +39,3 @@ class CbusServerConnection:
                 if c == ';': # End of CAN frame
                     #print("Got a CAN Frame:", gcMessage)
                     yield GCtoCAN(gcMessage)
-
-                gcMessage += c

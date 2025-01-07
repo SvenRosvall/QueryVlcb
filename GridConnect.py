@@ -26,7 +26,7 @@ def GCtoCAN(gc: str) -> canmessage:
     canid = int(gc[2:pos], 16) >> 5
 
     data = gc[pos + 1:]
-    datalen = int((len(gc) - pos) / 2)
+    datalen = int((len(gc) - pos - 1) / 2)
     bytedata = [ int(data[i * 2: (i * 2) + 2], 16) for i in range(datalen)]
 
     msg = canmessage(canid=canid, ext=ext, rtr=rtr, data = bytedata)
