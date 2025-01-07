@@ -16,6 +16,11 @@ form.
 This script takes an optional command line parameter that is the node number of
 the node to be queried. 
 
+### CountCANCABs.py
+Sends a parameter query to node number 65535, which is dedicated to CANCAB,
+and counts the received responses.
+This assumes that each connected CANCAB responds to this parameter query.
+
 ## Supporting files
 The scripts above makes use of the following files:
 
