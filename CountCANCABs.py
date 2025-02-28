@@ -5,12 +5,6 @@ from sys import argv
 from CbusServerConnection import *
 from CbusInfo import *
 
-def hibyte(n: int) -> int:
-    return n >> 8
-
-def lobyte(n: int) -> int:
-    return n & 0xFF
-
 nn=65535
 
 cbusConnection=CbusServerConnection() 

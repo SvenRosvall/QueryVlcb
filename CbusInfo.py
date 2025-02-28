@@ -5,6 +5,12 @@ from canmessage import canmessage
 def nodeNumber(h: int, l:int):
     return (h<<8) + l
 
+def hibyte(n: int) -> int:
+    return n >> 8
+
+def lobyte(n: int) -> int:
+    return n & 0xFF
+
 def manufacturerName(id: int):
     manu = VlcbManufacturer[id]
     if manu:
