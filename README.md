@@ -21,6 +21,11 @@ Sends a parameter query to node number 65535, which is dedicated to CANCAB,
 and counts the received responses.
 This assumes that each connected CANCAB responds to this parameter query.
 
+### CanBufferHighWatermark.py
+Queries all nodes and for each VLCB node query the CAN Service
+high watermark diagnostic. 
+This is useful to identify potential CAN problems.
+
 ## Supporting files
 The scripts above makes use of the following files:
 
