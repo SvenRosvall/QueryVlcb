@@ -6,6 +6,9 @@ class CbusServerConnection:
     def __init__(self):
         self.conn = NetworkConnection()
 
+        self.gcFrame = ""
+        self.data = []
+
     def sendMessage(self, canMessage : canmessage):
         self.sendRawFrame(CANtoGC(canMessage))
 
@@ -17,51 +20,41 @@ class CbusServerConnection:
 
     def receiveMessages(self):
         for frame in self.receiveRawFrames():
+            #print("Received frame:", frame)
             yield GCtoCAN(frame)
 
     def receiveRawFrame(self):
-        gcFrame = ''
         startTime = time.time()
         while time.time() < startTime + 1.0:
-            #print("Waiting for data...")
-            try:
-                data = self.sock.recv(128)
-            except socket.timeout:
-                #print("End of data")
-                break
-            #print("Got some data: ", data)
+            if not self.data:
+                #print("Waiting for data...")
+                try:
+                    rcv = self.sock.recv(128).decode()
+                    #print("Received some data: ", rcv)
+                    self.data = list(rcv)
+                except socket.timeout:
+                    #print("End of data")
+                    break
+                #print("Got some data: ", self.data)
 
-            for c in data.decode():
-                gcFrame += c
+            c = self.data.pop(0)
+            self.gcFrame += c
 
-                if c == ':': # Start of new CAN frame
-                    gcFrame = ''
-                    continue
+            if c == ':': # Start of new CAN frame
+                self.gcFrame = ''
+                continue
 
-                if c == ';': # End of CAN frame
-                    #print("Got a CAN Frame:", gcMessage)
-                    return gcFrame
+            if c == ';': # End of CAN frame
+                #print("Got a CAN Frame:", self.gcFrame)
+                return self.gcFrame
 
     def receiveRawFrames(self):
-        gcFrame = ''
         startTime = time.time()
         while time.time() < startTime + 1.0:
-            #print("Waiting for data...")
-            data = self.conn.receiveData()
-            if data is None:
-                break
-            #print("Got some data: ", data)
-
-            for c in data.decode():
-                gcFrame += c
-
-                if c == ':': # Start of new CAN frame
-                    gcFrame = ''
-                    continue
-
-                if c == ';': # End of CAN frame
-                    #print("Got a CAN Frame:", gcMessage)
-                    yield gcFrame
+            res = self.receiveRawFrame()
+            if res is None:
+                return
+            yield res
 
     def askMessage(self, canMessage : canmessage):
         self.sendMessage(canMessage)
