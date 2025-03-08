@@ -11,7 +11,7 @@ else:
     nn=0 # Default is SLIM nodes
 
 cbusConnection=CbusServerConnection() 
-responses = cbusConnection.askMessage(canmessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), 0]))
+responses = cbusConnection.askMessages(canmessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), 0]))
 
 paramResponses=[]
 for canFrame in responses:
@@ -36,7 +36,7 @@ if len(paramResponses) == 1:
     # Need to get the params one by one.
     #print("will get each param one by one")
     for i in range(nParams):
-        responses = cbusConnection.askMessage(canmessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), i+1]))
+        responses = cbusConnection.askMessages(canmessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), i + 1]))
         for canFrame in responses:
             if canFrame.get_op_code() == OPC_PARAN :
                 #showCbusMessage(canFrame)

@@ -8,7 +8,7 @@ from CbusInfo import *
 nn=65535
 
 cbusConnection=CbusServerConnection() 
-responses = cbusConnection.askMessage(canmessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), 3]))
+responses = cbusConnection.askMessages(canmessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), 3]))
 
 paramResponses=[]
 for canFrame in responses:
