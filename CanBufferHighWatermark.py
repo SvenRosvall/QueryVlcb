@@ -3,7 +3,6 @@
 
 from CbusServerConnection import *
 from CbusInfo import *
-from CountCANCABs import hibyte
 
 def printNodeInfo(nn:int) :
     services = cbusConnection.askMessages(canmessage(data = [OPC_RQSD, hibyte(nn), lobyte(nn), 0]))
