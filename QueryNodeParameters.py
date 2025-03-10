@@ -14,7 +14,7 @@ def lobyte(n: int) -> int:
 if len(argv) > 1:
     nn=int(argv[1])
 else:
-    nn=0
+    nn=0 # Default is SLIM nodes
 
 cbusConnection=CbusServerConnection() 
 responses = cbusConnection.askMessage(canmessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), 0]))
@@ -26,6 +26,10 @@ for canFrame in responses:
         # showCbusMessage(canFrame)
         paramResponses.append(canFrame)
 #print(f"Got {len(paramResponses)} responses.")
+
+if not paramResponses:
+    print("No responses from nodes with NN =", nn)
+    exit(0)
 
 if paramResponses[0].data[3] != 0:
     print("The first response is not the number of parameters")
