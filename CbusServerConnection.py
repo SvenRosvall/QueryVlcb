@@ -28,14 +28,12 @@ class CbusServerConnection:
         while time.time() < startTime + 1.0:
             if not self.data:
                 #print("Waiting for data...")
-                try:
-                    rcv = self.sock.recv(128).decode()
-                    #print("Received some data: ", rcv)
-                    self.data = list(rcv)
-                except socket.timeout:
-                    #print("End of data")
+                rcv = self.conn.receiveData()
+                if rcv is None:
                     break
-                #print("Got some data: ", self.data)
+                #print("Received some data: ", rcv)
+                self.data = list(rcv.decode())
+            #print("Got some data: ", self.data)
 
             c = self.data.pop(0)
             self.gcFrame += c
