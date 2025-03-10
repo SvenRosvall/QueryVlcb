@@ -5,14 +5,14 @@ class TestGridConnect(unittest.TestCase):
     def test_CANtoGC(self):
         msg = canmessage(canid=0x42, data=[0x17])
         gc = CANtoGC(msg)
-        self.assertEqual(gc, ":SB840N17;")
+        self.assertEqual(":SB840N17;", gc)
 
     def test_GCtoCAN(self):
         gc = ":SB840N17;"
         msg = GCtoCAN(gc)
-        self.assertEqual(msg.get_canid(), 0x42)
-        self.assertEqual(msg.dlc, 1)
-        self.assertEqual(list(msg.data), [0x17])
+        self.assertEqual(0x42, msg.get_canid())
+        self.assertEqual(1, msg.dlc)
+        self.assertEqual([0x17], list(msg.data))
 
 if __name__ == '__main__':
     unittest.main()
