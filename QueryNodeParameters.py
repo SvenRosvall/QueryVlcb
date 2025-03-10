@@ -5,12 +5,6 @@ from sys import argv
 from CbusServerConnection import *
 from CbusInfo import *
 
-def hibyte(n: int) -> int:
-    return n >> 8
-
-def lobyte(n: int) -> int:
-    return n & 0xFF
-
 if len(argv) > 1:
     nn=int(argv[1])
 else:
