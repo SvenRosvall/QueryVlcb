@@ -1,31 +1,23 @@
-import socket
 import time
 from GridConnect import *
+from NetworkConnection import *
 
 class CbusServerConnection:
-    def __init__(self, host="localhost", port=5550):
-        try:
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.sock.connect((host, port))
-        except:
-            print("Could not connect to CBUS Server")
-            exit(1)
-        self.sock.settimeout(1.0)
+    def __init__(self):
+        self.conn = NetworkConnection()
 
     def askMessage(self, canMessage : canmessage):
         return self.askRaw(CANtoGC(canMessage))
 
     def askRaw(self, gcFrame):
-        self.sock.send(gcFrame.encode())
+        self.conn.sendData(gcFrame.encode())
 
         gcMessage = ''
         startTime = time.time()
         while time.time() < startTime + 1.0:
             #print("Waiting for data...")
-            try:
-                data = self.sock.recv(128)
-            except socket.timeout:
-                #print("End of data")
+            data = self.conn.receiveData()
+            if data is None:
                 break
             #print("Got some data: ", data)
 
