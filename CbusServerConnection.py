@@ -3,7 +3,9 @@ from GridConnect import *
 from NetworkConnection import *
 
 class CbusServerConnection:
-    def __init__(self, connection = NetworkConnection()):
+    def __init__(self, connection = None):
+        if connection is None:
+            connection = NetworkConnection()
         self.conn = connection
 
         self.gcFrame = ""
