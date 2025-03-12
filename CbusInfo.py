@@ -1,6 +1,6 @@
 from vlcbdefs import *
 from vlcbdictionaries import *
-from canmessage import canmessage
+from CanMessage import CanMessage
 
 def nodeNumber(h: int, l:int):
     return (h<<8) + l
@@ -39,7 +39,7 @@ def cpuName(manId: int, cpuId: int):
         return f"Unknown CPU Manufacturer({manId})"
     
 
-def showCbusMessage(canFrame: canmessage):
+def showCbusMessage(canFrame: CanMessage):
     if canFrame.data[0] == OPC_PNN :
         print("PNN NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
               " Manufacturer=", manufacturerName(canFrame.data[3]),

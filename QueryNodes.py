@@ -5,7 +5,7 @@ from CbusServerConnection import *
 from CbusInfo import *
 
 cbusConnection=CbusServerConnection() 
-responses = cbusConnection.askMessages(canmessage(data = [OPC_QNN]))
+responses = cbusConnection.askMessages(CanMessage(data = [OPC_QNN]))
 
 for canFrame in responses:
     if canFrame.get_op_code() == OPC_PNN :

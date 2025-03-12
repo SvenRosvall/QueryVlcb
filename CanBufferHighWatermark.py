@@ -5,7 +5,7 @@ from CbusServerConnection import *
 from CbusInfo import *
 
 def printNodeInfo(nn:int) :
-    services = cbusConnection.askMessages(canmessage(data = [OPC_RQSD, hibyte(nn), lobyte(nn), 0]))
+    services = cbusConnection.askMessages(CanMessage(data = [OPC_RQSD, hibyte(nn), lobyte(nn), 0]))
     svcCount = -1
     canSvcIdx = -1
     canSvcVer = -1
@@ -18,21 +18,21 @@ def printNodeInfo(nn:int) :
             canSvcVer = svc.data[5]
         
     print("Node", nn, "svc count=", svcCount, "CAN svc index=", canSvcIdx, "svc ver=", canSvcVer)
-    cbusConnection.sendMessage(canmessage(data = [OPC_RDGN, hibyte(nn), lobyte(nn), canSvcIdx, 0x11]))
+    cbusConnection.sendMessage(CanMessage(data = [OPC_RDGN, hibyte(nn), lobyte(nn), canSvcIdx, 0x11]))
     resp = cbusConnection.receiveMessage()
-    print("TX Dgn nn=", nodeNumber(resp.data[1], resp.data[2]), "ix=", resp.data[3], "code=", resp.data[4], "value=", resp.data[5], resp.data[6])
+    #print("TX Dgn nn=", nodeNumber(resp.data[1], resp.data[2]), "ix=", resp.data[3], "code=", resp.data[4], "value=", resp.data[5], resp.data[6])
     txHW = (resp.data[5] << 8) + resp.data[6]
 
-    cbusConnection.sendMessage(canmessage(data = [OPC_RDGN, hibyte(nn), lobyte(nn), canSvcIdx, 0x12]))
+    cbusConnection.sendMessage(CanMessage(data = [OPC_RDGN, hibyte(nn), lobyte(nn), canSvcIdx, 0x12]))
     resp = cbusConnection.receiveMessage()
-    print("RX Dgn nn=", nodeNumber(resp.data[1], resp.data[2]), "ix=", resp.data[3], "code=", resp.data[4], "value=", resp.data[5], resp.data[6])
+    #print("RX Dgn nn=", nodeNumber(resp.data[1], resp.data[2]), "ix=", resp.data[3], "code=", resp.data[4], "value=", resp.data[5], resp.data[6])
     rxHW = (resp.data[5] << 8) + resp.data[6]
 
     print("Node", nn, "TX high watermark=", txHW, "RX high watermark=", rxHW)
 
 cbusConnection=CbusServerConnection() 
 
-cbusConnection.sendMessage(canmessage(data = [OPC_QNN]))
+cbusConnection.sendMessage(CanMessage(data = [OPC_QNN]))
 vlcbNodes = []
 for canFrame in cbusConnection.receiveMessages():
     if canFrame.get_op_code() == OPC_PNN :

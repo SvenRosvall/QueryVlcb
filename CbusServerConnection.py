@@ -11,7 +11,7 @@ class CbusServerConnection:
         self.gcFrame = ""
         self.data = []
 
-    def sendMessage(self, canMessage : canmessage):
+    def sendMessage(self, canMessage : CanMessage):
         self.sendRawFrame(CANtoGC(canMessage))
 
     def sendRawFrame(self, gcFrame):
@@ -56,10 +56,10 @@ class CbusServerConnection:
                 return
             yield res
 
-    def askMessage(self, canMessage : canmessage):
+    def askMessage(self, canMessage : CanMessage):
         self.sendMessage(canMessage)
         return self.receiveMessage()
 
-    def askMessages(self, canMessage : canmessage):
+    def askMessages(self, canMessage : CanMessage):
         self.sendMessage(canMessage)
         return self.receiveMessages()

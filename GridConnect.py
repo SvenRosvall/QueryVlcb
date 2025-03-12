@@ -1,6 +1,6 @@
-from canmessage import canmessage
+from CanMessage import CanMessage
 
-def CANtoGC(msg: canmessage) -> str:
+def CANtoGC(msg: CanMessage) -> str:
     tid = msg.canid << 5
 
     gc = ':'
@@ -13,7 +13,7 @@ def CANtoGC(msg: canmessage) -> str:
     gc += ';'
     return gc
 
-def GCtoCAN(gc: str) -> canmessage:
+def GCtoCAN(gc: str) -> CanMessage:
     ext = True if (gc[1] == 'X') else False
 
     pos = gc.find('N')
@@ -29,7 +29,7 @@ def GCtoCAN(gc: str) -> canmessage:
     datalen = int((len(gc) - pos - 1) / 2)
     bytedata = [ int(data[i * 2: (i * 2) + 2], 16) for i in range(datalen)]
 
-    msg = canmessage(canid=canid, ext=ext, rtr=rtr, data = bytedata)
+    msg = CanMessage(canid=canid, ext=ext, rtr=rtr, data = bytedata)
     #print('convert ok')
 
     return msg

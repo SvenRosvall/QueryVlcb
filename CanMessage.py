@@ -1,6 +1,10 @@
+from vlcbdictionaries import VlcbOpCodes
 
-class canmessage:
-    def __init__(self, canid: int = 0, dlc: int = -1, data = [], rtr: bool = False, ext: bool = False):
+
+class CanMessage:
+    def __init__(self, canid: int = 0, dlc: int = -1, data = None, rtr: bool = False, ext: bool = False):
+        if data is None:
+            data = []
         self.canid = canid
         self.make_header()
         self.dlc = dlc
@@ -42,7 +46,7 @@ class canmessage:
         return self.canid & 0x7f
 
     def is_event(self) -> bool:
-        return self.data[0] in event_opcodes
+        return self.data[0] in VlcbOpCodes
 
     def is_short_event(self) -> bool:
         return True if self.is_event() and self.data[0] & (1 << 3) else False
