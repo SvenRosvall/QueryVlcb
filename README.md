@@ -26,6 +26,9 @@ Queries all nodes and for each VLCB node query the CAN Service
 high watermark diagnostic. 
 This is useful to identify potential CAN problems.
 
+### ManufacturerReset.py
+Resets a node to manufacturer settings.
+
 ## Supporting files
 The scripts above makes use of the following files:
 

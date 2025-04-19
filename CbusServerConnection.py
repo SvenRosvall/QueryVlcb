@@ -18,7 +18,11 @@ class CbusServerConnection:
         self.conn.sendData(gcFrame.encode())
 
     def receiveMessage(self):
-        return GCtoCAN(self.receiveRawFrame())
+        frame = self.receiveRawFrame()
+        if frame is not None:
+            return GCtoCAN(frame)
+        else:
+            return None
 
     def receiveMessages(self):
         for frame in self.receiveRawFrames():

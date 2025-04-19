@@ -51,5 +51,11 @@ def showCbusMessage(canFrame: CanMessage):
               " Parameter no: ", canFrame.data[3],
               " Parameter value=", canFrame.data[4],
               sep='')
+    elif canFrame.data[0] == OPC_GRSP :
+        print("GRSP NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+              "Request Op=", VlcbOpCodes[canFrame.data[3]],
+              "Service=", VlcbServiceTypes[canFrame.data[4]],
+              "Result=", VlcbGrspCodes[canFrame.data[5]],
+              sep='')
     else:
         print("Unsupported OP code:", canFrame.data[0], VlcbOpCodes[canFrame.data[0]])
