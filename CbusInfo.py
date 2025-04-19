@@ -1,15 +1,6 @@
 from vlcbdefs import *
 from vlcbdictionaries import *
-from CanMessage import CanMessage
-
-def nodeNumber(h: int, l:int):
-    return (h<<8) + l
-
-def hibyte(n: int) -> int:
-    return n >> 8
-
-def lobyte(n: int) -> int:
-    return n & 0xFF
+from CanMessage import *
 
 def manufacturerName(id: int):
     manu = VlcbManufacturer[id]

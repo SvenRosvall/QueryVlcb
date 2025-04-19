@@ -1,9 +1,20 @@
 
+
+def nodeNumber(h: int, l:int):
+    return (h<<8) + l
+
+def hibyte(n: int) -> int:
+    return n >> 8
+
+def lobyte(n: int) -> int:
+    return n & 0xFF
+
 class CanMessage:
     def __init__(self,
                  canid: int = 0,
                  dlc: int = -1,
                  op_code: int = -1,
+                 node_number: int = -1,
                  data = None,
                  rtr: bool = False,
                  ext: bool = False):
@@ -27,6 +38,10 @@ class CanMessage:
             self.data[0] = op_code
             datalen = max(datalen, 1)
             #print(f"CanMessage set opc={op_code}, new len={datalen}")
+        if node_number >= 0:
+            self.data[1] = hibyte(node_number)
+            self.data[2] = lobyte(node_number)
+            datalen = max(datalen, 3)            
         if self.dlc == -1:
             self.dlc = datalen
             #print("CanMessage dlc not set, setting to", self.dlc)

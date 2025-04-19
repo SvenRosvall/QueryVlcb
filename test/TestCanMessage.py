@@ -32,3 +32,9 @@ class TestCanMessage(unittest.TestCase):
         msg = CanMessage(op_code=0x17)
         self.assertEqual(0x17, msg.get_op_code())
         self.assertEqual("[580] [1] [ 17 ] ", str(msg))
+
+    def test_CreateMessageWithOpCodeAndNodeNumber(self):
+        msg = CanMessage(op_code=0x42, node_number=0x0123)
+        self.assertEqual(0x42, msg.get_op_code())
+        self.assertEqual(0x0123, msg.get_node_number())
+        self.assertEqual("[580] [3] [ 42 01 23 ] ", str(msg))
