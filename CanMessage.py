@@ -15,6 +15,7 @@ class CanMessage:
                  dlc: int = -1,
                  op_code: int = -1,
                  node_number: int = -1,
+                 parameters = None,
                  data = None,
                  rtr: bool = False,
                  ext: bool = False):
@@ -41,7 +42,10 @@ class CanMessage:
         if node_number >= 0:
             self.data[1] = hibyte(node_number)
             self.data[2] = lobyte(node_number)
-            datalen = max(datalen, 3)            
+            datalen = max(datalen, 3)
+        if parameters is not None:
+            self.data[datalen:datalen+len(parameters)] = parameters
+            datalen += len(parameters)
         if self.dlc == -1:
             self.dlc = datalen
             #print("CanMessage dlc not set, setting to", self.dlc)

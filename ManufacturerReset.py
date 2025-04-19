@@ -12,7 +12,7 @@ else:
     exit(1)
 
 cbusConnection = CbusServerConnection()
-responses = cbusConnection.askMessages(CanMessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), 0]))
+responses = cbusConnection.askMessages(CanMessage(op_code=OPC_RQNPN, node_number=nn, parameters=[0]))
 
 paramResponses=[]
 for canFrame in responses:
@@ -37,7 +37,7 @@ if len(paramResponses) == 1:
     # Need to get the params one by one.
     #print("will get each param one by one")
     for i in range(nParams):
-        responses = cbusConnection.askMessages(CanMessage(data = [OPC_RQNPN, hibyte(nn), lobyte(nn), i + 1]))
+        responses = cbusConnection.askMessages(CanMessage(op_code=OPC_RQNPN, node_number=nn, parameters=[i + 1]))
         for canFrame in responses:
             if canFrame.get_op_code() == OPC_PARAN :
                 #showCbusMessage(canFrame)
@@ -55,6 +55,6 @@ if answer[0].lower() != 'y':
     print("Will not reset the node.")
     exit(0)
 
-response = cbusConnection.askMessage(CanMessage(data = [OPC_NNRSM, hibyte(nn), lobyte(nn)]))
+response = cbusConnection.askMessage(CanMessage(op_code=OPC_NNRSM, node_number=nn))
 if response is not None:
     showCbusMessage(response)
