@@ -27,3 +27,8 @@ class TestCanMessage(unittest.TestCase):
     def test_CreateExtendedMessage(self):
         msg = CanMessage(ext=True)
         self.assertEqual("[580] [0] [  ] X", str(msg))
+
+    def test_CreateMessageWithOpCode(self):
+        msg = CanMessage(op_code=0x17)
+        self.assertEqual(0x17, msg.get_op_code())
+        self.assertEqual("[580] [1] [ 17 ] ", str(msg))

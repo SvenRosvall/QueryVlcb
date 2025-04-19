@@ -2,19 +2,38 @@ from vlcbdictionaries import VlcbOpCodes
 
 
 class CanMessage:
-    def __init__(self, canid: int = 0, dlc: int = -1, data = None, rtr: bool = False, ext: bool = False):
-        if data is None:
-            data = []
+    def __init__(self,
+                 canid: int = 0,
+                 dlc: int = -1,
+                 op_code: int = -1,
+                 data = None,
+                 rtr: bool = False,
+                 ext: bool = False):
+        # if data is None:
+        #     data = []
         self.canid = canid
         self.make_header()
         self.dlc = dlc
-        self.data = bytearray(data)
         self.rtr = rtr
         self.ext = ext
+        if data is not None:
+            #print("New CanMessage with user provided data: ", data)
+            self.data = bytearray(data)
+            datalen = len(data)
+        else:
+            #print("New CanMessage without data")
+            self.data = bytearray(8)
+            datalen = 0
+        #print("CanMessage data len=", datalen, "data=", self.data)
+        if op_code >= 0:
+            self.data[0] = op_code
+            datalen = max(datalen, 1)
+            #print(f"CanMessage set opc={op_code}, new len={datalen}")
         if self.dlc == -1:
-            self.dlc = len(data)
-        if len(data) > 0 and len(data) != (data[0] >> 5) + 1:
-            raise ValueError(f"Incorrect number of data bytes ({len(data)}) for opcode {data[0]:X}")
+            self.dlc = datalen
+            #print("CanMessage dlc not set, setting to", self.dlc)
+        if self.data is not None and datalen > 0 and datalen != (self.data[0] >> 5) + 1:
+            raise ValueError(f"Incorrect number of data bytes ({datalen}) for opcode {self.data[0]:X}")
 
     def __str__(self):
         rtr = "R" if self.rtr else ""
