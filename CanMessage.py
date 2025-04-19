@@ -1,5 +1,3 @@
-from vlcbdictionaries import VlcbOpCodes
-
 
 class CanMessage:
     def __init__(self,
@@ -48,27 +46,11 @@ class CanMessage:
         )
         return cstr
 
-    def __iter__(self):
-        if self.dlc > 0:
-            if self.is_event():
-                self.polarity = 0 if self.data[0] & 1 else 1
-                for x in self.polarity, self.get_node_number(), self.get_event_number():
-                    yield x
-            else:
-                for x in self.data[:self.dlc]:
-                    yield x
-
     def make_header(self, priority=0x0b) -> None:
         self.canid = (priority << 7) + (self.canid & 0x7f)
 
     def get_canid(self) -> int:
         return self.canid & 0x7f
-
-    def is_event(self) -> bool:
-        return self.data[0] in VlcbOpCodes
-
-    def is_short_event(self) -> bool:
-        return True if self.is_event() and self.data[0] & (1 << 3) else False
 
     def get_op_code(self) -> int:
         return self.data[0]
