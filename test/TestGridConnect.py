@@ -3,7 +3,7 @@ from GridConnect import *
 
 class TestGridConnect(unittest.TestCase):
     def test_CANtoGC(self):
-        msg = CanMessage(canid=0x42, data=[0x17])
+        msg = CanMessage(canid=0x42, op_code=0x17)
         gc = CANtoGC(msg)
         self.assertEqual(":SB840N17;", gc)
 

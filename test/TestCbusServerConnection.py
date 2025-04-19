@@ -8,7 +8,7 @@ class TestCbusServerConnection(unittest.TestCase):
         self.cbus = CbusServerConnection(self.connection)
 
     def testSendMessage(self):
-        self.cbus.sendMessage(CanMessage(canid=0x42, data=[0x17]))
+        self.cbus.sendMessage(CanMessage(canid=0x42, op_code=0x17))
         sentData = self.connection.getSentData()
         decodedData = bytes(sentData).decode()
         self.assertEqual(":SB840N17;", decodedData)

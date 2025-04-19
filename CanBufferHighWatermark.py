@@ -32,7 +32,7 @@ def printNodeInfo(nn:int) :
 
 cbusConnection=CbusServerConnection() 
 
-cbusConnection.sendMessage(CanMessage(data = [OPC_QNN]))
+cbusConnection.sendMessage(CanMessage(op_code = OPC_QNN))
 vlcbNodes = []
 for canFrame in cbusConnection.receiveMessages():
     if canFrame.get_op_code() == OPC_PNN :
