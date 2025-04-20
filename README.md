@@ -1,10 +1,16 @@
-# QueryCbus
-Some Python scripts to query for information on a CBUS layout.
+# QueryVlcb
+Some Python scripts to query for information on a VLCB/CBUS layout and perform
+some actions that are not provided by the [Module Management Console](https://github.com/david284/MMC-SERVER) (MMC).
+
+The scripts connect to a running CBUS Server on network port 5550 on the localhost.
+Such a server can be provided by MMC, JMRI CBUS Hub or Nigel Phillip's CBUS Server.
+
+Note: CBUS® is the registered trademark of Dr. Mike Bolton.
 
 ## Scripts
 
 ### QueryNodes.py
-Queries for nodes that are online on a CBUS network. 
+Queries for nodes that are online on a VLCB/CBUS network. 
 This script does not take any command line parameters.
 
 Sends a QNN message and collects the PNN responses from the nodes and presents them
@@ -47,11 +53,11 @@ communicating with the CBUS server.
 Interprets CBUS numbers into something human readable.
 
 ### vlcbdefs.py
-Contains CBUS constants. 
+Contains VLCB/CBUS constants. 
 Copied from https://github.com/SvenRosvall/VLCB-defs
 
 ### vlcbdictionaries.py
-Contains dictionaries for looking up human readable text for CBUS numbers.
+Contains dictionaries for looking up human readable text for VLCB/CBUS numbers.
 
 ### generateVlcbLookup.sh
 Generates `vlbdictionaries.py` from https://github.com/SvenRosvall/VLCB-defs
