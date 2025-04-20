@@ -1,5 +1,4 @@
-# Query nodes on the bus.
-# Send QNN and collect PNN responses.
+# Report HighWatermark for CAN buffers for each VLCB node on the bus.
 
 from CbusServerConnection import *
 from CbusInfo import *
@@ -32,19 +31,8 @@ def printNodeInfo(nn:int) :
 
 cbusConnection=CbusServerConnection() 
 
-cbusConnection.sendMessage(CanMessage(op_code = OPC_QNN))
-vlcbNodes = []
-for canFrame in cbusConnection.receiveMessages():
-    if canFrame.get_op_code() == OPC_PNN :
-        #canFrame.print()
-        #showCbusMessage(canFrame)
-        flags = canFrame.data[5]
-        if flags & PF_VLCB != 0 :
-            nn = nodeNumber(canFrame.data[1], canFrame.data[2])
-            vlcbNodes.append(nn)
-
 print("Node#  High Watermarks")
 print("        TX  RX")
-for node in vlcbNodes :
+for node in findVlcbNodes(cbusConnection) :
     #print("Found nn:", node)
     printNodeInfo(node)

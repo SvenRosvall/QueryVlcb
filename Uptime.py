@@ -1,4 +1,4 @@
-# Show uptime for each VLCB node.
+# Show uptime for each VLCB node on the bus.
 
 from CbusServerConnection import *
 from CbusInfo import *
@@ -34,18 +34,9 @@ def printNodeInfo(nn:int) :
 
     print(f"{nn:5} {uptime:6}  {upHour:2}:{upMin:02}:{upSec:02}")
 
-cbusConnection=CbusServerConnection() 
+cbusConnection=CbusServerConnection()
 
-cbusConnection.sendMessage(CanMessage(op_code = OPC_QNN))
-vlcbNodes = []
-for canFrame in cbusConnection.receiveMessages():
-    if canFrame.get_op_code() == OPC_PNN :
-        #canFrame.print()
-        #showCbusMessage(canFrame)
-        flags = canFrame.data[5]
-        if flags & PF_VLCB != 0 :
-            nn = nodeNumber(canFrame.data[1], canFrame.data[2])
-            vlcbNodes.append(nn)
+vlcbNodes = findVlcbNodes(cbusConnection)
 
 print("Node#  Uptime")
 for node in vlcbNodes :

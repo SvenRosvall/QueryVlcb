@@ -50,3 +50,16 @@ def showCbusMessage(canFrame: CanMessage):
               sep='')
     else:
         print("Unsupported OP code:", canFrame.data[0], VlcbOpCodes[canFrame.data[0]])
+
+def findVlcbNodes(cbusConnection) -> [int]:
+    cbusConnection.sendMessage(CanMessage(op_code=OPC_QNN))
+    vlcbNodes = []
+    for canFrame in cbusConnection.receiveMessages():
+        if canFrame.get_op_code() == OPC_PNN:
+            # canFrame.print()
+            # showCbusMessage(canFrame)
+            flags = canFrame.data[5]
+            if flags & PF_VLCB != 0:
+                nn = nodeNumber(canFrame.data[1], canFrame.data[2])
+                vlcbNodes.append(nn)
+    return vlcbNodes
