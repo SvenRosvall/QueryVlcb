@@ -17,7 +17,7 @@ def printNodeInfo(nn:int) :
             canSvcIdx = svc.data[3]
             canSvcVer = svc.data[5]
         
-    print("Node", nn, "svc count=", svcCount, "CAN svc index=", canSvcIdx, "svc ver=", canSvcVer)
+    #print("Node", nn, "svc count=", svcCount, "CAN svc index=", canSvcIdx, "svc ver=", canSvcVer)
     cbusConnection.sendMessage(CanMessage(op_code=OPC_RDGN, node_number=nn, parameters=[canSvcIdx, 0x11]))
     resp = cbusConnection.receiveMessage()
     #print("TX Dgn nn=", nodeNumber(resp.data[1], resp.data[2]), "ix=", resp.data[3], "code=", resp.data[4], "value=", resp.data[5], resp.data[6])
@@ -28,7 +28,7 @@ def printNodeInfo(nn:int) :
     #print("RX Dgn nn=", nodeNumber(resp.data[1], resp.data[2]), "ix=", resp.data[3], "code=", resp.data[4], "value=", resp.data[5], resp.data[6])
     rxHW = (resp.data[5] << 8) + resp.data[6]
 
-    print("Node", nn, "TX high watermark=", txHW, "RX high watermark=", rxHW)
+    print(f"{nn:5}  {txHW:3} {rxHW:3}")
 
 cbusConnection=CbusServerConnection() 
 
@@ -37,12 +37,14 @@ vlcbNodes = []
 for canFrame in cbusConnection.receiveMessages():
     if canFrame.get_op_code() == OPC_PNN :
         #canFrame.print()
-        showCbusMessage(canFrame)
+        #showCbusMessage(canFrame)
         flags = canFrame.data[5]
         if flags & PF_VLCB != 0 :
             nn = nodeNumber(canFrame.data[1], canFrame.data[2])
             vlcbNodes.append(nn)
 
+print("Node#  High Watermarks")
+print("        TX  RX")
 for node in vlcbNodes :
-    print("Found nn:", node)
+    #print("Found nn:", node)
     printNodeInfo(node)
