@@ -16,29 +16,18 @@ class CanMessage:
                  op_code: int = -1,
                  node_number: int = -1,
                  parameters = None,
-                 data = None,
                  rtr: bool = False,
                  ext: bool = False):
-        # if data is None:
-        #     data = []
         self.canid = canid
         self.make_header()
         self.dlc = dlc
         self.rtr = rtr
         self.ext = ext
-        if data is not None:
-            #print("New CanMessage with user provided data: ", data)
-            self.data = bytearray(data)
-            datalen = len(data)
-        else:
-            #print("New CanMessage without data")
-            self.data = bytearray(8)
-            datalen = 0
-        #print("CanMessage data len=", datalen, "data=", self.data)
+        self.data = bytearray(8)
+        datalen = 0
         if op_code >= 0:
             self.data[0] = op_code
             datalen = max(datalen, 1)
-            #print(f"CanMessage set opc={op_code}, new len={datalen}")
         if node_number >= 0:
             self.data[1] = hibyte(node_number)
             self.data[2] = lobyte(node_number)
@@ -48,7 +37,6 @@ class CanMessage:
             datalen += len(parameters)
         if self.dlc == -1:
             self.dlc = datalen
-            #print("CanMessage dlc not set, setting to", self.dlc)
         if self.data is not None and datalen > 0 and datalen != (self.data[0] >> 5) + 1:
             raise ValueError(f"Incorrect number of data bytes ({datalen}) for opcode {self.data[0]:X}")
 

@@ -29,7 +29,7 @@ def GCtoCAN(gc: str) -> CanMessage:
     datalen = int((len(gc) - pos - 1) / 2)
     bytedata = [ int(data[i * 2: (i * 2) + 2], 16) for i in range(datalen)]
 
-    msg = CanMessage(canid=canid, ext=ext, rtr=rtr, data = bytedata)
+    msg = CanMessage(canid=canid, ext=ext, rtr=rtr, parameters=bytedata)
     #print('convert ok')
 
     return msg

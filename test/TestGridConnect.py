@@ -12,7 +12,7 @@ class TestGridConnect(unittest.TestCase):
         msg = GCtoCAN(gc)
         self.assertEqual(0x42, msg.get_canid())
         self.assertEqual(1, msg.dlc)
-        self.assertEqual([0x17], list(msg.data))
+        self.assertEqual([0x17], list(msg.data[0:msg.dlc]))
 
 if __name__ == '__main__':
     unittest.main()
