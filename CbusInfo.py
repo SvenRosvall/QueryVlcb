@@ -63,3 +63,16 @@ def findVlcbNodes(cbusConnection) -> [int]:
                 nn = nodeNumber(canFrame.data[1], canFrame.data[2])
                 vlcbNodes.append(nn)
     return vlcbNodes
+
+def findServiceIndex(cbusConnection, nn, svcType) -> int:
+    services = cbusConnection.askMessages(CanMessage(op_code=OPC_RQSD, node_number=nn, parameters=[0]))
+    canSvcIdx = -1
+    canSvcVer = -1
+    for svc in services:
+        if svc.get_op_code() != OPC_SD: continue
+        if svc.get_node_number() != nn: continue
+        if svc.data[4] == svcType:
+            canSvcIdx = svc.data[3]
+            canSvcVer = svc.data[5]
+    return canSvcIdx
+

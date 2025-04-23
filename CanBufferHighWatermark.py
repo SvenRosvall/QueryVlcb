@@ -4,18 +4,8 @@ from CbusServerConnection import *
 from CbusInfo import *
 
 def printNodeInfo(nn:int) :
-    services = cbusConnection.askMessages(CanMessage(op_code=OPC_RQSD, node_number=nn, parameters=[0]))
-    svcCount = -1
-    canSvcIdx = -1
-    canSvcVer = -1
-    for svc in services :
-        if svc.get_op_code() != OPC_SD : continue
-        if svc.get_node_number() != nn : continue
-        if svc.data[3] == 0 : svcCount = svc.data[5]
-        if svc.data[4] == SERVICE_ID_CAN : 
-            canSvcIdx = svc.data[3]
-            canSvcVer = svc.data[5]
-        
+    canSvcIdx = findServiceIndex(cbusConnection, nn, SERVICE_ID_CAN)
+
     #print("Node", nn, "svc count=", svcCount, "CAN svc index=", canSvcIdx, "svc ver=", canSvcVer)
     cbusConnection.sendMessage(CanMessage(op_code=OPC_RDGN, node_number=nn, parameters=[canSvcIdx, 0x11]))
     resp = cbusConnection.receiveMessage()
