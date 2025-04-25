@@ -15,8 +15,6 @@ MANU_MERG = 165    # https://www.merg.co.uk
 MANU_SPROG = 44    # https://www.sprog-dcc.co.uk/
 MANU_ROCRAIL = 70    # http://www.rocrail.net
 MANU_SPECTRUM = 80    # http://animatedmodeler.com  (Spectrum Engineering)
-MANU_MERG_VLCB = 250    # range of MERG VLCB modules
-MANU_VLCB = 250    # range of MERG VLCB modules (Deprecated in favour of MANU_MERG_VLCB)
 MANU_SYSPIXIE = 249    # Konrad Orlowski
 MANU_RME = 248    # http://rmeuk.com  (Railway Modelling Experts Limited)
 # 
@@ -114,7 +112,9 @@ MTYP_CANCMDB = 83    # CANCMD with built in booster (Simon West)
 MTYP_CANPIXEL = 84    # neopixel driver (Jon Denham)
 MTYP_CANCABPE = 85    # Cab2 with pot or encoder (Simon West hardware, Jon Denham new C firmware)
 MTYP_CANSMARTTD = 86    # Smart train detector (Michael Smith)
+MTYP_CANARGB = 87    # Addressable LEDs (Ian Hogg)
 MTYP_VLCB = 0xFC    # All VLCB modules have the same ID
+# 
 # 
 # 
 # 
@@ -501,6 +501,8 @@ MODE_HEARTBEAT_ON = 0x0C    # Turn on heartbeat
 MODE_HEARTBEAT_OFF = 0x0D    # Turn off heartbeat
 # Boot modes
 MODE_BOOT = 0x0E    # PIC Boot loader mode
+MODE_FCUCOMPAT_ON = 0x10    # Turn on FCU compatibility
+MODE_FCUCOMPAT_OFF = 0x11    # Turn off FCU compatibility
 # 
 # BUS type that module is connected to
 # 
@@ -582,3 +584,10 @@ PRODUCER_EV_SLOTS = 0x02    # Slots
 CONSUMER_EV_NOT_SPECIFIED = 0x00    # Not specified
 CONSUMER_EV_ACTIONS = 0x01    # Actions
 CONSUMER_EV_SLOTS = 0x02    # Slots
+# 
+# Boot service reports of the module bootloader type
+# 
+BL_TYPE_Unknown = 0    # Unknown or not specified
+BL_TYPE_MikeBolton = 1    # Original bootloader from Mike Bolton, Roger Healey, Pete Brownlow and others written in PIC assembler
+BL_TYPE_KonradOrlowski = 2    #  Konrad (syspixie) bootloader written in XC8
+BL_TYPE_IanHogg = 3    #  Ian Hogg bootloader written in XC8

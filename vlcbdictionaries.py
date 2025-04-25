@@ -15,8 +15,6 @@ VlcbManufacturer = {
   44 : "SPROG", # https://www.sprog-dcc.co.uk/
   70 : "ROCRAIL", # http://www.rocrail.net
   80 : "SPECTRUM", # http://animatedmodeler.com  (Spectrum Engineering)
-  250 : "MERG_VLCB", # range of MERG VLCB modules
-  250 : "VLCB", # range of MERG VLCB modules (Deprecated in favour of MANU_MERG_VLCB)
   249 : "SYSPIXIE", # Konrad Orlowski
   248 : "RME", # http://rmeuk.com  (Railway Modelling Experts Limited)
 }
@@ -116,6 +114,7 @@ VlcbMergModuleTypes = {
   84 : "CANPIXEL", # neopixel driver (Jon Denham)
   85 : "CANCABPE", # Cab2 with pot or encoder (Simon West hardware, Jon Denham new C firmware)
   86 : "CANSMARTTD", # Smart train detector (Michael Smith)
+  87 : "CANARGB", # Addressable LEDs (Ian Hogg)
   0xFC : "VLCB", # All VLCB modules have the same ID
   # 
   # At the time of writing the list of defined MERG module types is maintained by Pete Brownlow software@upsys.co.uk
@@ -530,6 +529,7 @@ VlcbParamFlags = {
   16 : "COE", # Module can consume its own events
   32 : "LRN", # Module is in learn mode
   64 : "VLCB", # Module is VLCB compatible
+  64 : "SD", # Module supports Service Discovery (Deprecated in favour of PF_VLCB.)
 }
 
 VlcbModeParams = {
@@ -551,6 +551,8 @@ VlcbModeParams = {
   0x0D : "HEARTBEAT_OFF", # Turn off heartbeat
   # Boot modes
   0x0E : "BOOT", # PIC Boot loader mode
+  0x10 : "FCUCOMPAT_ON", # Turn on FCU compatibility
+  0x11 : "FCUCOMPAT_OFF", # Turn off FCU compatibility
 }
 
 VlcbBusTypes = {
@@ -653,5 +655,15 @@ VlcbConsumerEvUsage = {
   0x00 : "EV_NOT_SPECIFIED", # Not specified
   0x01 : "EV_ACTIONS", # Actions
   0x02 : "EV_SLOTS", # Slots
+}
+
+VlcbBootloaderType = {
+  # 
+  # Boot service reports of the module bootloader type
+  # 
+  0 : "TYPE_Unknown", # Unknown or not specified
+  1 : "TYPE_MikeBolton", # Original bootloader from Mike Bolton, Roger Healey, Pete Brownlow and others written in PIC assembler
+  2 : "TYPE_KonradOrlowski", #  Konrad (syspixie) bootloader written in XC8
+  3 : "TYPE_IanHogg", #  Ian Hogg bootloader written in XC8
 }
 
