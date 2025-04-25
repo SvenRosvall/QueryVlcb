@@ -79,5 +79,7 @@ def findServiceIndex(cbusConnection, nn, svcType) -> int:
 def getDiagValue(cbusConnection, nn, svcIdx, diag):
     cbusConnection.sendMessage(CanMessage(op_code=OPC_RDGN, node_number=nn, parameters=[svcIdx, diag]))
     resp = cbusConnection.receiveMessage()
+    if resp.data[0] != OPC_DGN:
+        return 0
     txHW = (resp.data[5] << 8) + resp.data[6]
     return txHW
