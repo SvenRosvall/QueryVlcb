@@ -64,17 +64,17 @@ def findVlcbNodes(cbusConnection) -> [int]:
                 vlcbNodes.append(nn)
     return vlcbNodes
 
-def findServiceIndex(cbusConnection, nn, svcType) -> int:
+def findServiceIndices(cbusConnection, nn) -> {}:
     services = cbusConnection.askMessages(CanMessage(op_code=OPC_RQSD, node_number=nn, parameters=[0]))
-    canSvcIdx = -1
-    canSvcVer = -1
+    result = {}
     for svc in services:
         if svc.get_op_code() != OPC_SD: continue
         if svc.get_node_number() != nn: continue
-        if svc.data[4] == svcType:
-            canSvcIdx = svc.data[3]
-            canSvcVer = svc.data[5]
-    return canSvcIdx
+        result[svc.data[4]] = svc.data[3]
+    return result
+
+def findServiceIndex(cbusConnection, nn, svcType) -> int:
+    return findServiceIndices(cbusConnection, nn)[svcType]
 
 def getDiagValue(cbusConnection, nn, svcIdx, diag):
     cbusConnection.sendMessage(CanMessage(op_code=OPC_RDGN, node_number=nn, parameters=[svcIdx, diag]))
