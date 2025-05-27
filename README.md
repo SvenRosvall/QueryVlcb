@@ -56,6 +56,10 @@ produced and consumed events.
 <dd>Shows some error counters for each VLCB node.
 </dd>
 
+<dt>Uptime.py</dt>
+<dd>Show uptime for each VLCB node.
+</dd>
+
 <dt>ManufacturerReset.py</dt>
 <dd>Resets a node to manufacturer settings.
 </dd>
