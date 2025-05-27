@@ -44,9 +44,9 @@ def showCbusMessage(canFrame: CanMessage):
               sep='')
     elif canFrame.data[0] == OPC_GRSP :
         print("GRSP NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
-              "Request Op=", VlcbOpCodes[canFrame.data[3]],
-              "Service=", VlcbServiceTypes[canFrame.data[4]],
-              "Result=", VlcbGrspCodes[canFrame.data[5]],
+              " Request Op=", VlcbOpCodes[canFrame.data[3]],
+              " Service=", VlcbServiceTypes[canFrame.data[4]],
+              " Result=", VlcbGrspCodes[canFrame.data[5]],
               sep='')
     else:
         print("Unsupported OP code:", canFrame.data[0], VlcbOpCodes[canFrame.data[0]])
@@ -79,7 +79,11 @@ def findServiceIndex(cbusConnection, nn, svcType) -> int:
 def getDiagValue(cbusConnection, nn, svcIdx, diag):
     cbusConnection.sendMessage(CanMessage(op_code=OPC_RDGN, node_number=nn, parameters=[svcIdx, diag]))
     resp = cbusConnection.receiveMessage()
-    if resp.data[0] != OPC_DGN:
-        return 0
-    txHW = (resp.data[5] << 8) + resp.data[6]
-    return txHW
+    while resp is not None and resp.data[0] != OPC_DGN:
+        #print(f"Didn't get expected DGN response. svcIdx={svcIdx}, diag={diag}")
+        #showCbusMessage(resp)
+        resp = cbusConnection.receiveMessage()
+    if resp is None:
+        return -1
+    value = (resp.data[5] << 8) + resp.data[6]
+    return value

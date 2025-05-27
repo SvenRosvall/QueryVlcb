@@ -1,5 +1,6 @@
 # Show uptime for each VLCB node on the bus.
 
+from sys import argv
 from CbusServerConnection import *
 from CbusInfo import *
 
@@ -17,7 +18,10 @@ def printNodeInfo(nn:int) :
 
 cbusConnection=CbusServerConnection()
 
-vlcbNodes = findVlcbNodes(cbusConnection)
+if len(argv) > 1:
+    vlcbNodes = (int(n) for n in argv[1:])
+else:
+    vlcbNodes = findVlcbNodes(cbusConnection)
 
 print("Node#  Uptime")
 for node in vlcbNodes :
