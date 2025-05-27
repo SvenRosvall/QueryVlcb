@@ -9,70 +9,91 @@ Note: CBUS® is the registered trademark of Dr. Mike Bolton.
 
 ## Scripts
 
-QueryNodes.py
-: Queries for nodes that are online on a VLCB/CBUS network. 
+<dl>
+<dt>QueryNodes.py</dt>
+<dd>Queries for nodes that are online on a VLCB/CBUS network. 
 This script does not take any command line parameters.
 
-: Sends a QNN message and collects the PNN responses from the nodes and presents them
+Sends a QNN message and collects the PNN responses from the nodes and presents them
 in a human-readable form.
+</dd>
 
-QueryNodeParameters.py
-: Queries a node for its parameters and presents these parameters in a human readable
+<dt>QueryNodeParameters.py</dt>
+<dd>Queries a node for its parameters and presents these parameters in a human readable
 form.
 This script takes an optional command line parameter that is the node number of
 the node to be queried. 
+</dd>
 
-CountCANCABs.py
-: Sends a parameter query to node number 65535, which is dedicated to CANCAB,
+<dt>CountCANCABs.py</dt>
+<dd>Sends a parameter query to node number 65535, which is dedicated to CANCAB,
 and counts the received responses.
 This assumes that each connected CANCAB responds to this parameter query.
+</dd>
 
-CanActivity.py
-: Shows CAN message counts and other info that indicates activity on the CAN bus.
+<dt>CanActivity.py</dt>
+<dd>Shows CAN message counts and other info that indicates activity on the CAN bus.
+</dd>
 
-CanErrors.py
-: Shows errors on the CAN bus for each VLCB node.
+<dt>CanErrors.py</dt>
+<dd>Shows errors on the CAN bus for each VLCB node.
+</dd>
 
-CanBufferHighWatermark.py
-: Queries all nodes and for each VLCB node query the CAN Service
+<dt>CanBufferHighWatermark.py</dt>
+<dd>Queries all nodes and for each VLCB node query the CAN Service
 high watermark diagnostic. 
 This is useful to identify potential CAN problems.
 
-: This was created as an early test and is now incorporated into CanActivity.py.
+This was created as an early test and is now incorporated into CanActivity.py.
+</dd>
 
-NodeActivity.py
-: Shows counters that show activity for each VLCB node such as counts of
+<dt>NodeActivity.py</dt>
+<dd>Shows counters that show activity for each VLCB node such as counts of
 produced and consumed events.
+</dd>
 
-NodeErrors.py
-: Shows some error counters for each VLCB node.
+<dt>NodeErrors.py</dt>
+<dd>Shows some error counters for each VLCB node.
+</dd>
 
-ManufacturerReset.py
-: Resets a node to manufacturer settings.
+<dt>ManufacturerReset.py</dt>
+<dd>Resets a node to manufacturer settings.
+</dd>
+
+</dl>
 
 ## Supporting files
 The scripts above makes use of the following files:
 
-CanMessage.py
-: A class that represents a CAN frame and its information.
+<dl>
+<dt>CanMessage.py</dt>
+<dd>A class that represents a CAN frame and its information.
+</dd>
 
-CbusServerConnection.py
-: Makes a connection to a CBUS Server on network port 5550 on the localhost.
+<dt>CbusServerConnection.py</dt>
+<dd>Makes a connection to a CBUS Server on network port 5550 on the localhost.
 Provides functions for sending and receiving CAN messages on this port.
+</dd>
 
-GridConnect.py
-: Converts `canmessage` to and from a GridConnect format that can be used when
+<dt>GridConnect.py</dt>
+<dd>Converts `canmessage` to and from a GridConnect format that can be used when
 communicating with the CBUS server.
+</dd>
 
-CbusInfo.py
-: Interprets CBUS numbers into something human-readable.
+<dt>CbusInfo.py</dt>
+<dd>Interprets CBUS numbers into something human-readable.
+</dd>
 
-vlcbdefs.py
-: Contains VLCB/CBUS constants. 
-Copied from https://github.com/SvenRosvall/VLCB-defs
+<dt>vlcbdefs.py</dt>
+<dd>Contains VLCB/CBUS constants. 
+Copied from <a href="https://github.com/SvenRosvall/VLCB-defs">https://github.com/SvenRosvall/VLCB-defs</a>
+</dd>
 
-vlcbdictionaries.py
-: Contains dictionaries for looking up human-readable text for VLCB/CBUS numbers.
+<dt>vlcbdictionaries.py</dt>
+<dd>Contains dictionaries for looking up human-readable text for VLCB/CBUS numbers.
+</dd>
 
-generateVlcbLookup.sh
-: Generates `vlbdictionaries.py` from https://github.com/SvenRosvall/VLCB-defs
+<dt>generateVlcbLookup.sh</dt>
+<dd>Generates `vlbdictionaries.py` from https://github.com/SvenRosvall/VLCB-defs
+</dd>
+</dl>
