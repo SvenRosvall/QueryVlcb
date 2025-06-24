@@ -31,23 +31,54 @@ def cpuName(manId: int, cpuId: int):
     
 
 def showCbusMessage(canFrame: CanMessage):
-    if canFrame.data[0] == OPC_PNN :
+    op = canFrame.data[0]
+    if op == OPC_PNN :
         print("PNN NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
               " Manufacturer=", manufacturerName(canFrame.data[3]),
               " ModuleID=", moduleName(canFrame.data[4]),
               " Flags=", flags(canFrame.data[5]),
               sep='')
-    elif canFrame.data[0] == OPC_PARAN :
+    elif op == OPC_PARAN :
         print("PARAN NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
               " Parameter no: ", canFrame.data[3],
               " Parameter value=", canFrame.data[4],
               sep='')
-    elif canFrame.data[0] == OPC_GRSP :
+    elif op == OPC_GRSP :
         print("GRSP NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
               " Request Op=", VlcbOpCodes[canFrame.data[3]],
               " Service=", VlcbServiceTypes[canFrame.data[4]],
               " Result=", VlcbGrspCodes[canFrame.data[5]],
               sep='')
+    elif op == OPC_ACON or op == OPC_ACOF or op == OPC_ASON or op == OPC_ASOF\
+            or op == OPC_AREQ or op == OPC_ARON or op == OPC_AROF\
+            or op == OPC_ASRQ or op == OPC_ARSON or op == OPC_ARSOF:
+        print(VlcbOpCodes[op], 
+              " NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+              " EN=", nodeNumber(canFrame.data[3], canFrame.data[4]),
+              sep='')
+    elif op == OPC_RQSD:
+        print ("RQSD NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+               " Service Index=", canFrame.data[3],
+              sep='')
+    elif op == OPC_SD:
+        if canFrame.data[3] == 0 and canFrame.data[4] == 0:
+            print ("SD NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+                   " Number of Services=", canFrame.data[5],
+                  sep='')
+        else:
+            print ("SD NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+                   " Service Index=", canFrame.data[3],
+                   " Type=", VlcbServiceTypes[canFrame.data[4]],
+                   " Version=", canFrame.data[5],
+                  sep='')
+    elif op == OPC_ESD:
+        print ("ESD NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+               " Service Index=", canFrame.data[3],
+               " Type=", VlcbServiceTypes[canFrame.data[4]],
+               " Data=", canFrame.data[5], " ", canFrame.data[6], " ", canFrame.data[7], " ",
+              sep='')
+    # OP-codes while refreshing Nodes list: QNN, RQEVN, NUMEV, NNEVN, EVLNF, NERD, ENRSP
+    # Other op: RDGN, DGN
     else:
         print("Unsupported OP code:", canFrame.data[0], VlcbOpCodes[canFrame.data[0]])
 
