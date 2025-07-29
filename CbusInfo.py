@@ -65,11 +65,22 @@ def showCbusMessage(canFrame: CanMessage):
               " Value=", canFrame.data[5],
               sep='')
     elif op == OPC_ENRSP:
-        print ("ENRSP NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+        print("ENRSP NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
                " Event NN=", nodeNumber(canFrame.data[3], canFrame.data[4]),
                " EN=", nodeNumber(canFrame.data[5], canFrame.data[6]),
                " index=", canFrame.data[7],
                sep='')
+    elif op == OPC_REQEV:
+        print("REQEV NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+              " EN=", nodeNumber(canFrame.data[3], canFrame.data[4]),
+              " Event index=", canFrame.data[5],
+              sep='')
+    elif op == OPC_EVANS:
+        print("REQEV NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+              " EN=", nodeNumber(canFrame.data[3], canFrame.data[4]),
+              " Event index=", canFrame.data[5],
+              " value=", canFrame.data[6],
+              sep='')
     elif op == OPC_ACON or op == OPC_ACOF or op == OPC_ASON or op == OPC_ASOF\
             or op == OPC_AREQ or op == OPC_ARON or op == OPC_AROF\
             or op == OPC_ASRQ or op == OPC_ARSON or op == OPC_ARSOF:
@@ -101,14 +112,14 @@ def showCbusMessage(canFrame: CanMessage):
     # OP-codes with no data
     elif op == OPC_QNN:
         print (VlcbOpCodes[op])
-        if canFrame.dlc != 1 :
+        if canFrame.dlc != 1:
             print(f"Message length is {canFrame.dlc}, expected 1.")
     # OP-codes with NN and no further data:
     elif op == OPC_RQEVN or op == OPC_WRACK or op == OPC_NERD or op == OPC_NNEVN or op == OPC_NNLRN or op == OPC_NNULN:
         print (VlcbOpCodes[op],
                " NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
                sep='')
-        if canFrame.dlc != 3 :
+        if canFrame.dlc != 3:
             print(f"Message length is {canFrame.dlc}, expected 3.")
     # OP-codes with NN and a count
     elif op == OPC_NUMEV or op == OPC_EVNLF:
@@ -116,7 +127,7 @@ def showCbusMessage(canFrame: CanMessage):
                " NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
                " Count=", canFrame.data[3],
                sep='')
-        if canFrame.dlc != 4 :
+        if canFrame.dlc != 4:
             print(f"Message length is {canFrame.dlc}, expected 4.")
     # OP-codes with NN and an index
     elif op == OPC_RQNPN or op == OPC_NVRD:
@@ -124,7 +135,7 @@ def showCbusMessage(canFrame: CanMessage):
                " NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
                " index=", canFrame.data[3],
                sep='')
-        if canFrame.dlc != 4 :
+        if canFrame.dlc != 4:
             print(f"Message length is {canFrame.dlc}, expected 4.")
     # OP-codes with NN and an index and a value
     elif op == OPC_NVSET or op == OPC_NVANS:
@@ -133,9 +144,23 @@ def showCbusMessage(canFrame: CanMessage):
                " index=", canFrame.data[3],
                " value=", canFrame.data[4],
                sep='')
-        if canFrame.dlc != 5 :
+        if canFrame.dlc != 5:
             print(f"Message length is {canFrame.dlc}, expected 5.")
-    # Other op: RDGN, DGN
+    elif op == OPC_RDGN:
+        print ("RDGN NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+               "Svc index=", canFrame.data[3],
+               "Diag code=", canFrame.data[4],
+               sep='')
+        if canFrame.dlc != 5:
+            print(f"Message length is {canFrame.dlc}, expected 5.")
+    elif op == OPC_DGN:
+        print ("DGN NN=", nodeNumber(canFrame.data[1], canFrame.data[2]),
+               " Svc index=", canFrame.data[3],
+               " Diag code=", canFrame.data[4],
+               " value =", nodeNumber(canFrame.data[5], canFrame.data[6]),
+               sep='')
+        if canFrame.dlc != 7:
+            print(f"Message length is {canFrame.dlc}, expected 7.")
     else:
         print("??", VlcbOpCodes[canFrame.data[0]], end='')
         for i in range(1, canFrame.dlc):
