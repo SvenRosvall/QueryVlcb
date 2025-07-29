@@ -3,11 +3,10 @@ from vlcbdictionaries import *
 from CanMessage import *
 
 def manufacturerName(id: int):
-    manu = VlcbManufacturer[id]
-    if manu:
-        return manu
+    if id in VlcbManufacturer:
+        return VlcbManufacturer[id]
     else:
-        return "Unknown"
+        return f"Unknown({id})"
 
 def moduleName(id: int):
     if id in VlcbMergModuleTypes:
@@ -25,7 +24,7 @@ def cpuName(manId: int, cpuId: int):
         if cpuId in VlcbMicrochipProcessors:
             return VlcbMicrochipProcessors[cpuId]
         else:
-            return f"Unknown Microchip processor(cpuId)"
+            return f"Unknown Microchip processor({cpuId})"
     else:
         return f"Unknown CPU Manufacturer({manId})"
     
@@ -190,7 +189,10 @@ def findServiceIndices(cbusConnection, nn) -> {}:
     return result
 
 def findServiceIndex(cbusConnection, nn, svcType) -> int:
-    return findServiceIndices(cbusConnection, nn)[svcType]
+    indices = findServiceIndices(cbusConnection, nn)
+    if svcType not in indices:
+        raise KeyError(f"Cannot find service '{VlcbServiceTypes[svcType]}' ({svcType}) in node {nn}.")
+    return indices[svcType]
 
 def getDiagValue(cbusConnection, nn, svcIdx, diag):
     cbusConnection.sendMessage(CanMessage(op_code=OPC_RDGN, node_number=nn, parameters=[svcIdx, diag]))
