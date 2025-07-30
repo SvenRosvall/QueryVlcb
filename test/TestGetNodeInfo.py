@@ -24,7 +24,26 @@ class TestCbusInfo_connected(unittest.TestCase):
         self.connection.setReceivedData(CANtoGC(resp1))
         self.connection.setReceivedData(CANtoGC(resp2))
         self.connection.setReceivedData(CANtoGC(resp3))
+
         result = findVlcbNodes(self.cbus)
+
         self.assertEqual(2, len(result))
         self.assertEqual(4711, result[0])
         self.assertEqual(4712, result[1])
+
+    def test_findServiceIndices(self):
+        resp0 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[0, 0, 2])
+        resp1 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[2, SERVICE_ID_MNS, 1])
+        resp2 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[3, SERVICE_ID_CAN, 1])
+        self.connection.setReceivedData(CANtoGC(resp0))
+        self.connection.setReceivedData(CANtoGC(resp1))
+        self.connection.setReceivedData(CANtoGC(resp2))
+
+        result = findServiceIndices(self.cbus, 4711)
+
+        self.assertEqual(2, len(result))
+        self.assertEqual(2, result[SERVICE_ID_MNS])
+        self.assertEqual(3, result[SERVICE_ID_CAN])

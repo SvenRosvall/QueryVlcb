@@ -21,6 +21,7 @@ def findServiceIndices(cbusConnection, nn) -> {}:
     for svc in services:
         if svc.get_op_code() != OPC_SD: continue
         if svc.get_node_number() != nn: continue
+        if svc.data[3] == 0: continue
         result[svc.data[4]] = svc.data[3]
     return result
 
