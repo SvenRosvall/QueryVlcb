@@ -8,6 +8,7 @@ class MockNetworkConnection:
         return self.sentData
 
     def setReceivedData(self, data):
+        #print("MockNetworkConnection::receiveData() storing message for later:", data)
         self.dataToReceive.append(data)
 
     def sendData(self, data):
@@ -17,4 +18,5 @@ class MockNetworkConnection:
         if not self.dataToReceive:
             return None
         nextMessage = self.dataToReceive.pop(0)
+        #print("MockNetworkConnection::receiveData() returning:", nextMessage)
         return bytes(nextMessage, 'ascii')
