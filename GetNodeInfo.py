@@ -41,7 +41,7 @@ def getDiagValue(cbusConnection, nn, svcIdx, diag):
     if resp is None:
         return -1
     value = (resp.data[5] << 8) + resp.data[6]
-    if value != 0:
-        rnn = (resp.data[1] << 8) + resp.data[2]
-        print(f"Diag value={value}, nn={rnn} ({nn}), svcIdx={resp.data[3]} ({svcIdx}), diagCode={resp.data[4]} ({diag})")
+    # if value != 0:
+    #     rnn = (resp.data[1] << 8) + resp.data[2]
+    #     print(f"Diag value={value}, nn={rnn} ({nn}), svcIdx={resp.data[3]} ({svcIdx}), diagCode={resp.data[4]} ({diag})")
     return value

@@ -47,3 +47,32 @@ class TestCbusInfo_connected(unittest.TestCase):
         self.assertEqual(2, len(result))
         self.assertEqual(2, result[SERVICE_ID_MNS])
         self.assertEqual(3, result[SERVICE_ID_CAN])
+
+    def test_findServiceIndex(self):
+        resp0 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[0, 0, 2])
+        resp1 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[2, SERVICE_ID_MNS, 1])
+        resp2 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[3, SERVICE_ID_CAN, 1])
+        self.connection.setReceivedData(CANtoGC(resp0))
+        self.connection.setReceivedData(CANtoGC(resp1))
+        self.connection.setReceivedData(CANtoGC(resp2))
+
+        result = findServiceIndex(self.cbus, 4711, SERVICE_ID_MNS)
+
+        self.assertEqual(2, result)
+
+    def test_findServiceIndex_missing(self):
+        resp0 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[0, 0, 2])
+        resp1 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[2, SERVICE_ID_MNS, 1])
+        resp2 = CanMessage(op_code=OPC_SD, node_number=4711,
+                           parameters=[3, SERVICE_ID_CAN, 1])
+        self.connection.setReceivedData(CANtoGC(resp0))
+        self.connection.setReceivedData(CANtoGC(resp1))
+        self.connection.setReceivedData(CANtoGC(resp2))
+
+        with self.assertRaises(KeyError):
+            findServiceIndex(self.cbus, 4711, SERVICE_ID_EVENTACK)

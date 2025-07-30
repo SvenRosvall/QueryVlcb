@@ -4,10 +4,13 @@ from CbusServerConnection import *
 from GetNodeInfo import *
 
 def printNodeInfo(nn:int) :
-    mnsSvcIdx = findServiceIndex(cbusConnection, nn, SERVICE_ID_MNS)
-    status = getDiagValue(cbusConnection, nn, mnsSvcIdx, 0x01)
-    memFault = getDiagValue(cbusConnection, nn, mnsSvcIdx, 0x04)
-    print(f"{nn:5}  {status:3} {memFault:3x}")
+    try:
+        mnsSvcIdx = findServiceIndex(cbusConnection, nn, SERVICE_ID_MNS)
+        status = getDiagValue(cbusConnection, nn, mnsSvcIdx, 0x01)
+        memFault = getDiagValue(cbusConnection, nn, mnsSvcIdx, 0x04)
+        print(f"{nn:5}  {status:3} {memFault:3x}")
+    except KeyError:
+        print(f"{nn:5}  does not have a MNS service")
 
 cbusConnection=CbusServerConnection() 
 
