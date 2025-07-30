@@ -88,6 +88,10 @@ communicating with the CBUS server.
 <dd>Interprets CBUS numbers into something human-readable.
 </dd>
 
+<dt>GetNodeInfo.py</dt>
+<dd>Functions for querying connected nodes for information.
+</dd>
+
 <dt>vlcbdefs.py</dt>
 <dd>Contains VLCB/CBUS constants. 
 Copied from <a href="https://github.com/SvenRosvall/VLCB-defs">https://github.com/SvenRosvall/VLCB-defs</a>

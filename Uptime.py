@@ -2,7 +2,7 @@
 
 from sys import argv
 from CbusServerConnection import *
-from CbusInfo import *
+from GetNodeInfo import *
 
 def printNodeInfo(nn:int) :
     mnsSvcIdx = findServiceIndex(cbusConnection, nn, SERVICE_ID_MNS)

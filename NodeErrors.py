@@ -1,7 +1,7 @@
 # Report error counts for each VLCB node on the bus.
 
 from CbusServerConnection import *
-from CbusInfo import *
+from GetNodeInfo import *
 
 def printNodeInfo(nn:int) :
     mnsSvcIdx = findServiceIndex(cbusConnection, nn, SERVICE_ID_MNS)

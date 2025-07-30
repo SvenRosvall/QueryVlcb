@@ -1,7 +1,7 @@
 # Report HighWatermark for CAN buffers for each VLCB node on the bus.
 
 from CbusServerConnection import *
-from CbusInfo import *
+from GetNodeInfo import *
 
 def printNodeInfo(nn:int) :
     canSvcIdx = findServiceIndex(cbusConnection, nn, SERVICE_ID_CAN)
