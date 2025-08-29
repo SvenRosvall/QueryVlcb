@@ -56,7 +56,7 @@ def describeCbusMessage(canFrame: CanMessage):
               f" Event index={canFrame.data[3]}" + \
               f" Event variable index={canFrame.data[4]}"
     elif op == OPC_NEVAL:
-        ret = f"REVAL NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
+        ret = f"NEVAL NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" Event index={canFrame.data[3]}" + \
               f" EV index={canFrame.data[4]}" + \
               f" Value={canFrame.data[5]}"

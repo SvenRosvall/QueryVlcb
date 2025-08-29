@@ -37,17 +37,36 @@ class TestCbusInfo(unittest.TestCase):
 
     def test_showCbusMessage_PNN(self):
         self.assertEqual("PNN NN=4711 Manufacturer=MERG ModuleID=CANPAN Flags=CONSUMER PRODUCER NORMAL SD",
-                         describeCbusMessage(CanMessage(op_code=OPC_PNN, node_number=4711,
-                                                        parameters=[MANU_MERG, MTYP_CANPAN, 71])))
-
+            describeCbusMessage(CanMessage(op_code=OPC_PNN, node_number=4711,
+                parameters=[MANU_MERG, MTYP_CANPAN, 71])))
 
     def test_showCbusMessage_PARAN(self):
         self.assertEqual("PARAN NN=4711 Parameter no: 7 Parameter value=12",
-                         describeCbusMessage(CanMessage(op_code=OPC_PARAN, node_number=4711,
-                                                        parameters=[7, 12])))
+            describeCbusMessage(CanMessage(op_code=OPC_PARAN, node_number=4711,
+                parameters=[7, 12])))
+
+    def test_showCbusMessage_GRSP(self):
+        self.assertEqual("GRSP NN=4711 Request Op=REVAL Service=ID_MNS Result=INVALID_MODE",
+            describeCbusMessage(CanMessage(op_code=OPC_GRSP, node_number=4711,
+                parameters=[OPC_REVAL, SERVICE_ID_MNS, GRSP_INVALID_MODE])))
+
+    def test_showCbusMessage_CMDERR(self):
+        self.assertEqual("CMDERR NN=4711 Result=INV_CMD",
+            describeCbusMessage(CanMessage(op_code=OPC_CMDERR, node_number=4711,
+                parameters=[CMDERR_INV_CMD])))
+
+    def test_showCbusMessage_REVAL(self):
+        self.assertEqual("REVAL NN=4711 Event index=7 Event variable index=3",
+            describeCbusMessage(CanMessage(op_code=OPC_REVAL, node_number=4711,
+                parameters=[7, 3])))
+
+    def test_showCbusMessage_NEVAL(self):
+        self.assertEqual("NEVAL NN=4711 Event index=7 EV index=3 Value=42",
+            describeCbusMessage(CanMessage(op_code=OPC_NEVAL, node_number=4711,
+                parameters=[7, 3, 42])))
 
     def test_showCbusMessage_HEARTB(self):
         self.assertEqual("HEARTB NN=4711 Seq=42 Status=17 StatusBits=3",
-                         describeCbusMessage(CanMessage(op_code=OPC_HEARTB, node_number=4711,
-                                                        parameters=[42, 17, 3])))
+            describeCbusMessage(CanMessage(op_code=OPC_HEARTB, node_number=4711,
+                parameters=[42, 17, 3])))
 
