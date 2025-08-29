@@ -35,9 +35,14 @@ class TestCbusInfo(unittest.TestCase):
     def test_cpuName_unknownCpu(self):
         self.assertEqual("Unknown Microchip processor(0)", cpuName(CPUM_MICROCHIP, 0))
 
-    # TODO: Can't test this as showCbusMessage() prints rather than returning a string.
-    # def test_showCbusMessage_PNN(self):
-    #     self.assertEqual("PNN NN=4711 Manufacturer=MERG ModuleId=CANPAN FLAGS=CONSUMER PRODUCER NORMAL SD",
-    #                      showCbusMessage(CanMessage(op_code=OPC_PNN,  node_number=4711,
-    #                                                 parameters=[MANU_MERG, MTYP_CANPAN, 71])))
+    def test_showCbusMessage_PNN(self):
+        self.assertEqual("PNN NN=4711 Manufacturer=MERG ModuleID=CANPAN Flags=CONSUMER PRODUCER NORMAL SD",
+                         describeCbusMessage(CanMessage(op_code=OPC_PNN, node_number=4711,
+                                                        parameters=[MANU_MERG, MTYP_CANPAN, 71])))
+
+
+    def test_showCbusMessage_PARAN(self):
+        self.assertEqual("PARAN NN=4711 Parameter no: 7 Parameter value=12",
+                         describeCbusMessage(CanMessage(op_code=OPC_PARAN, node_number=4711,
+                                                        parameters=[7, 12])))
 
