@@ -15,7 +15,7 @@ def printNodeInfo(nn:int) :
         txErrFrms = getDiagValue(cbusConnection, nn, canSvcIdx, 0x0B)
         arbLost = getDiagValue(cbusConnection, nn, canSvcIdx, 0x0C)
         idFail = getDiagValue(cbusConnection, nn, canSvcIdx, 0x10)
-        print(f"{nn:5}     {errStat:02X}   {rxErrCnt:3}   {txErrCnt:3}    {rxErrFrms:3}    {txErrFrms:3}     {rxBufOver:3}   {txBufOver:3}        {arbLost:3}        {idFail:3}")
+        print(f"{nn:5}     {errStat:>02X}   {rxErrCnt:>3}   {txErrCnt:>3}    {rxErrFrms:>3}    {txErrFrms:>3}     {rxBufOver:>3}   {txBufOver:>3}        {arbLost:>3}        {idFail:>3}")
     except KeyError:
         print(f"{nn:5}  does not have a CAN service")
 

@@ -8,7 +8,7 @@ def printNodeInfo(nn:int) :
         canSvcIdx = findServiceIndex(cbusConnection, nn, SERVICE_ID_CAN)
         txHW = getDiagValue(cbusConnection, nn, canSvcIdx, 0x11)
         rxHW = getDiagValue(cbusConnection, nn, canSvcIdx, 0x12)
-        print(f"{nn:5}  {txHW:3} {rxHW:3}")
+        print(f"{nn:5}  {txHW:>3} {rxHW:>3}")
     except KeyError:
         print(f"{nn:5}  does not have a CAN service")
 

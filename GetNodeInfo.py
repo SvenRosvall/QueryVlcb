@@ -39,7 +39,7 @@ def getDiagValue(cbusConnection, nn, svcIdx, diag):
         #showCbusMessage(resp)
         resp = cbusConnection.receiveMessage()
     if resp is None:
-        return -1
+        return "-"
     value = (resp.data[5] << 8) + resp.data[6]
     # if value != 0:
     #     rnn = (resp.data[1] << 8) + resp.data[2]

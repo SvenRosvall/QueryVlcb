@@ -16,7 +16,7 @@ def printNodeInfo(nn:int) :
         txHighWatermark = getDiagValue(cbusConnection, nn, canSvcIdx, 0x11)
         rxHighWatermark = getDiagValue(cbusConnection, nn, canSvcIdx, 0x12)
 
-        print(f"{nn:5}  {rxCount:4}  {txCount:4}   {rxBufUse:3}    {txBufUse:3}    {rxHighWatermark:3}     {txHighWatermark:3}       {idEnums:3}     {idChanges:3}      {idConflicts:3}")
+        print(f"{nn:5}  {rxCount:>4}  {txCount:>4}   {rxBufUse:>3}    {txBufUse:>3}    {rxHighWatermark:>3}     {txHighWatermark:>3}       {idEnums:>3}     {idChanges:>3}      {idConflicts:>3}")
     except KeyError:
         print(f"{nn:5}  does not have a CAN service")
 
