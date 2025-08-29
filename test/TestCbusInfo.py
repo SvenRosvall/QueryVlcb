@@ -46,3 +46,8 @@ class TestCbusInfo(unittest.TestCase):
                          describeCbusMessage(CanMessage(op_code=OPC_PARAN, node_number=4711,
                                                         parameters=[7, 12])))
 
+    def test_showCbusMessage_HEARTB(self):
+        self.assertEqual("HEARTB NN=4711 Seq=42 Status=17 StatusBits=3",
+                         describeCbusMessage(CanMessage(op_code=OPC_HEARTB, node_number=4711,
+                                                        parameters=[42, 17, 3])))
+

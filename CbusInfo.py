@@ -129,6 +129,11 @@ def describeCbusMessage(canFrame: CanMessage):
               f" Svc index={canFrame.data[3]}" + \
               f" Diag code={canFrame.data[4]}" + \
               f" value={nodeNumber(canFrame.data[5], canFrame.data[6])}"
+    elif op == OPC_HEARTB:
+        ret = f"HEARTB NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
+              f" Seq={canFrame.data[3]}" + \
+              f" Status={canFrame.data[4]}" + \
+              f" StatusBits={canFrame.data[5]}"
     else:
         ret = f"?? {VlcbOpCodes[canFrame.data[0]]} " + \
               " ".join([f"{b:02X}" for b in canFrame.data[1:canFrame.dlc]])
