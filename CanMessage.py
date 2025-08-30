@@ -15,6 +15,8 @@ class CanMessage:
                  dlc: int = -1,
                  op_code: int = -1,
                  node_number: int = -1,
+                 event_node_number: int = -1,
+                 event_number: int = -1,
                  parameters = None,
                  rtr: bool = False,
                  ext: bool = False):
@@ -27,18 +29,26 @@ class CanMessage:
         datalen = 0
         if op_code >= 0:
             self.data[0] = op_code
-            datalen = max(datalen, 1)
+            datalen += 1
         if node_number >= 0:
             self.data[1] = hibyte(node_number)
             self.data[2] = lobyte(node_number)
-            datalen = max(datalen, 3)
+            datalen += 2
+        if event_node_number >= 0:
+            self.data[datalen] = hibyte(event_node_number)
+            self.data[datalen+1] = lobyte(event_node_number)
+            datalen += 2
+        if event_number >= 0:
+            self.data[datalen] = hibyte(event_number)
+            self.data[datalen+1] = lobyte(event_number)
+            datalen += 2
         if parameters is not None:
             self.data[datalen:datalen+len(parameters)] = parameters
             datalen += len(parameters)
         if self.dlc == -1:
             self.dlc = datalen
         if self.data is not None and datalen > 0 and datalen != (self.data[0] >> 5) + 1:
-            raise ValueError(f"Incorrect number of data bytes ({datalen}) for opcode {self.data[0]:X}")
+            raise ValueError(f"Incorrect number of data bytes ({datalen}) for opcode {self.data[0]:X}, expected {(self.data[0] >> 5) + 1}")
 
     def __str__(self):
         rtr = "R" if self.rtr else ""

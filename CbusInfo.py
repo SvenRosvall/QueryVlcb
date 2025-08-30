@@ -70,7 +70,7 @@ def describeCbusMessage(canFrame: CanMessage):
               f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}" + \
               f" Event index={canFrame.data[5]}"
     elif op == OPC_EVANS:
-        ret = f"REQEV NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
+        ret = f"EVANS NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}" + \
               f" Event index={canFrame.data[5]}" + \
               f" value={canFrame.data[6]}"

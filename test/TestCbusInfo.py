@@ -65,6 +65,21 @@ class TestCbusInfo(unittest.TestCase):
             describeCbusMessage(CanMessage(op_code=OPC_NEVAL, node_number=4711,
                 parameters=[7, 3, 42])))
 
+    def test_showCbusMessage_ENRSP(self):
+        self.assertEqual("ENRSP NN=4711 Event NN=5321 EN=1234 index=7",
+            describeCbusMessage(CanMessage(op_code=OPC_ENRSP, node_number=4711,
+                event_node_number=5321, event_number=1234, parameters=[7])))
+
+    def test_showCbusMessage_REQEV(self):
+        self.assertEqual("REQEV NN=4711 EN=1234 Event index=7",
+            describeCbusMessage(CanMessage(op_code=OPC_REQEV, node_number=4711,
+                event_number=1234, parameters=[7])))
+
+    def test_showCbusMessage_EVANS(self):
+        self.assertEqual("EVANS NN=4711 EN=1234 Event index=7 value=42",
+            describeCbusMessage(CanMessage(op_code=OPC_EVANS, node_number=4711,
+                event_number=1234, parameters=[7, 42])))
+
     def test_showCbusMessage_HEARTB(self):
         self.assertEqual("HEARTB NN=4711 Seq=42 Status=17 StatusBits=3",
             describeCbusMessage(CanMessage(op_code=OPC_HEARTB, node_number=4711,
