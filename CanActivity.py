@@ -16,14 +16,14 @@ def printNodeInfo(nn:int) :
         txHighWatermark = getDiagValue(cbusConnection, nn, canSvcIdx, 0x11)
         rxHighWatermark = getDiagValue(cbusConnection, nn, canSvcIdx, 0x12)
 
-        print(f"{nn:5}  {rxCount:>4}  {txCount:>4}   {rxBufUse:>3}    {txBufUse:>3}    {rxHighWatermark:>3}     {txHighWatermark:>3}       {idEnums:>3}     {idChanges:>3}      {idConflicts:>3}")
+        print(f"{nn:5}   {rxCount:>5} {txCount:>5}    {rxBufUse:>3}    {txBufUse:>3}     {rxHighWatermark:>3}     {txHighWatermark:>3}      {idEnums:>3}     {idChanges:>3}      {idConflicts:>3}")
     except KeyError:
         print(f"{nn:5}  does not have a CAN service")
 
 cbusConnection=CbusServerConnection() 
 
-print("Node#   Msg Count  Buffers Used  Buffer Watermark CANID")
-print("         RX    TX     RX     TX    RX      TX     Enums Changes Conflicts")
+print("Node#     Msg Count   Buffers Used  Buffer Watermark    CANID")
+print("           RX    TX     RX     TX      RX      TX      Enums Changes Conflicts")
 for node in findVlcbNodes(cbusConnection):
     # print("Found nn:", node)
     printNodeInfo(node)
