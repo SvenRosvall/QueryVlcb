@@ -76,7 +76,7 @@ class TestCbusInfo(unittest.TestCase):
                 event_number=1234, parameters=[7])))
 
     def test_showCbusMessage_EVANS(self):
-        self.assertEqual("EVANS NN=4711 EN=1234 Event index=7 value=42",
+        self.assertEqual("EVANS NN=4711 EN=1234 Event index=7 Value=42",
             describeCbusMessage(CanMessage(op_code=OPC_EVANS, node_number=4711,
                 event_number=1234, parameters=[7, 42])))
 

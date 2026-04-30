@@ -32,13 +32,128 @@ def cpuName(manId: int, cpuId: int):
 def showCbusMessage(canFrame: CanMessage):
     print(describeCbusMessage(canFrame))
 
+NodeNumberDef = {
+    "bytes": 2,
+    "name": "NN"
+}
+EventNumberDef = {
+    "bytes": 2,
+    "name": "EN"
+}
+EventIndexDef = {
+    "bytes": 1,
+    "name": "Event index"
+}
+EventValueDef = {
+    "bytes": 1,
+    "name": "Value"
+}
+
+VlcbOpCodeDefs = {
+    OPC_QNN: {
+        "name": "QNN",
+        "params": [],
+        "description": "Query for online nodes"
+    },
+    OPC_PNN: {
+        "name": "PNN",
+        "params": [
+            NodeNumberDef,
+            {
+                "bytes": 1,
+                "name": "Manufacturer",
+                "value": lambda v : manufacturerName(v)
+            },
+            {
+                "bytes": 1,
+                "name": "ModuleID",
+                "value": lambda v : moduleName(v)
+            },
+            {
+                "bytes": 1,
+                "name": "Flags",
+                "value": lambda v : flags(v)
+            }
+        ],
+        "description": "Response to QNN with node details"
+    },
+    OPC_EVANS: { 
+        "name": "EVANS",
+        "params": [ NodeNumberDef, EventNumberDef, EventIndexDef, EventValueDef ],
+        "description": "Response to a request event variable in learn mode" 
+    },
+    OPC_ACON: {
+        "name": "ACON",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Long Event ON"
+    },
+    OPC_ACOF: {
+        "name": "ACOF",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Long Event OFF"
+    },
+    OPC_ASON: {
+        "name": "ASON",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Short Event ON"
+    },
+    OPC_ASOF: {
+        "name": "ASOF",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Short Event OFF"
+    },
+    OPC_AREQ: {
+        "name": "AREQ",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Request Long Event State"
+    },
+    OPC_ARON: {
+        "name": "ARON",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Response Long Event ON"
+    },
+    OPC_AROF: {
+        "name": "AROF",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Response Long Event OFF"
+    },
+    OPC_ASRQ: {
+        "name": "ASRQ",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Request Short Event State"
+    },
+    OPC_ARSON: {
+        "name": "ARSON",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Response Short Event ON"
+    },
+    OPC_ARSOF: {
+        "name": "ARSOF",
+        "params": [ NodeNumberDef, EventNumberDef ],
+        "description": "Response Short Event OFF"
+    }
+}
+
+def getValue(data, start, count) :
+    ret = 0
+    for i in range(count):
+        ret *= 256
+        ret += data[start + i]
+    return ret
+
 def describeCbusMessage(canFrame: CanMessage):
     op = canFrame.data[0]
-    if op == OPC_PNN:
-        ret = f"PNN NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Manufacturer={manufacturerName(canFrame.data[3])}" + \
-              f" ModuleID={moduleName(canFrame.data[4])}" + \
-              f" Flags={flags(canFrame.data[5])}"
+    #print(f"Describing message : {canFrame}")
+    if (op in VlcbOpCodeDefs):
+        opDef = VlcbOpCodeDefs[op]
+        ret = f"{opDef["name"]}"
+        i = 1
+        for d in opDef["params"] :
+            value = getValue(canFrame.data, i, d["bytes"])
+            if ("value" in d):
+                value = d["value"](value)
+            ret += f" {d["name"]}={value}"
+            i += d["bytes"]
     elif op == OPC_PARAN:
         ret = f"PARAN NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" Parameter no: {canFrame.data[3]}" + \
@@ -69,17 +184,6 @@ def describeCbusMessage(canFrame: CanMessage):
         ret = f"REQEV NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}" + \
               f" Event index={canFrame.data[5]}"
-    elif op == OPC_EVANS:
-        ret = f"EVANS NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}" + \
-              f" Event index={canFrame.data[5]}" + \
-              f" value={canFrame.data[6]}"
-    elif op == OPC_ACON or op == OPC_ACOF or op == OPC_ASON or op == OPC_ASOF \
-            or op == OPC_AREQ or op == OPC_ARON or op == OPC_AROF \
-            or op == OPC_ASRQ or op == OPC_ARSON or op == OPC_ARSOF:
-        ret = f"{VlcbOpCodes[op]}" + \
-              f" NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}"
     elif op == OPC_RQSD:
         ret = f"RQSD NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" Service Index={canFrame.data[3]}"
@@ -97,9 +201,6 @@ def describeCbusMessage(canFrame: CanMessage):
               f" Service Index={canFrame.data[3]}" + \
               f" Type={VlcbServiceTypes[canFrame.data[4]]}" + \
               f" Data={canFrame.data[5]} {canFrame.data[6]} {canFrame.data[7]}"
-    # OP-codes with no data
-    elif op == OPC_QNN:
-        ret = f"{VlcbOpCodes[op]}"
     # OP-codes with NN and no further data:
     elif op == OPC_RQEVN or op == OPC_WRACK or op == OPC_NERD or op == OPC_NNEVN or op == OPC_NNLRN or op == OPC_NNULN:
         ret = f"{VlcbOpCodes[op]}" + \
