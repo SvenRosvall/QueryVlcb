@@ -51,12 +51,10 @@ EventValueDef = {
 
 VlcbOpCodeDefs = {
     OPC_QNN: {
-        "name": "QNN",
         "params": [],
         "description": "Query for online nodes"
     },
     OPC_PNN: {
-        "name": "PNN",
         "params": [
             NodeNumberDef,
             {
@@ -78,7 +76,6 @@ VlcbOpCodeDefs = {
         "description": "Response to QNN with node details"
     },
     OPC_SD: {
-        "name": "SD",
         "alt_params": {
             "cond": lambda msg : "count" if msg[3] == 0 and msg[4] == 0 else "service",
             "count": [
@@ -111,57 +108,46 @@ VlcbOpCodeDefs = {
         "description": "Response to service discovery request"
     },
     OPC_EVANS: { 
-        "name": "EVANS",
         "params": [ NodeNumberDef, EventNumberDef, EventIndexDef, EventValueDef ],
         "description": "Response to a request event variable in learn mode" 
     },
     OPC_ACON: {
-        "name": "ACON",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Long Event ON"
     },
     OPC_ACOF: {
-        "name": "ACOF",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Long Event OFF"
     },
     OPC_ASON: {
-        "name": "ASON",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Short Event ON"
     },
     OPC_ASOF: {
-        "name": "ASOF",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Short Event OFF"
     },
     OPC_AREQ: {
-        "name": "AREQ",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Request Long Event State"
     },
     OPC_ARON: {
-        "name": "ARON",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Response Long Event ON"
     },
     OPC_AROF: {
-        "name": "AROF",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Response Long Event OFF"
     },
     OPC_ASRQ: {
-        "name": "ASRQ",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Request Short Event State"
     },
     OPC_ARSON: {
-        "name": "ARSON",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Response Short Event ON"
     },
     OPC_ARSOF: {
-        "name": "ARSOF",
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Response Short Event OFF"
     }
@@ -179,7 +165,7 @@ def describeCbusMessage(canFrame: CanMessage):
     #print(f"Describing message : {canFrame}")
     if (op in VlcbOpCodeDefs):
         opDef = VlcbOpCodeDefs[op]
-        ret = f"{opDef["name"]}"
+        ret = VlcbOpCodes[op]
         if "alt_params" in opDef:
             alt_key = opDef["alt_params"]["cond"](canFrame.data)
             params = opDef["alt_params"][alt_key]
