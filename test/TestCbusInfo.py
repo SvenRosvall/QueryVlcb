@@ -85,3 +85,12 @@ class TestCbusInfo(unittest.TestCase):
             describeCbusMessage(CanMessage(op_code=OPC_HEARTB, node_number=4711,
                 parameters=[42, 17, 3])))
 
+    def test_showCbusMessage_SD_Count(self):
+        self.assertEqual("SD NN=4711 Number of Services=7",
+            describeCbusMessage(CanMessage(op_code=OPC_SD, node_number=4711,
+                parameters=[0, 0, 7])))
+
+    def test_showCbusMessage_SD_CanService(self):
+        self.assertEqual("SD NN=4711 Service Index=3 Type=ID_CAN Version=2",
+            describeCbusMessage(CanMessage(op_code=OPC_SD, node_number=4711,
+                parameters=[3, 3, 2])))

@@ -77,6 +77,39 @@ VlcbOpCodeDefs = {
         ],
         "description": "Response to QNN with node details"
     },
+    OPC_SD: {
+        "name": "SD",
+        "alt_params": {
+            "cond": lambda msg : "count" if msg[3] == 0 and msg[4] == 0 else "service",
+            "count": [
+                NodeNumberDef,
+                {
+                    "ignore": 2
+                },
+                {
+                    "bytes": 1,
+                    "name": "Number of Services"
+                }
+            ],
+            "service": [
+                NodeNumberDef,
+                {
+                    "bytes": 1,
+                    "name": "Service Index"
+                },
+                {
+                    "bytes": 1,
+                    "value": lambda v: VlcbServiceTypes[v],
+                    "name": "Type"
+                },
+                {
+                    "bytes": 1,
+                    "name": "Version"
+                }
+            ]
+        },
+        "description": "Response to service discovery request"
+    },
     OPC_EVANS: { 
         "name": "EVANS",
         "params": [ NodeNumberDef, EventNumberDef, EventIndexDef, EventValueDef ],
@@ -147,8 +180,16 @@ def describeCbusMessage(canFrame: CanMessage):
     if (op in VlcbOpCodeDefs):
         opDef = VlcbOpCodeDefs[op]
         ret = f"{opDef["name"]}"
+        if "alt_params" in opDef:
+            alt_key = opDef["alt_params"]["cond"](canFrame.data)
+            params = opDef["alt_params"][alt_key]
+        else:
+            params = opDef["params"]
         i = 1
-        for d in opDef["params"] :
+        for d in params:
+            if "ignore" in d:
+                i += d["ignore"]
+                continue
             value = getValue(canFrame.data, i, d["bytes"])
             if ("value" in d):
                 value = d["value"](value)
@@ -187,15 +228,6 @@ def describeCbusMessage(canFrame: CanMessage):
     elif op == OPC_RQSD:
         ret = f"RQSD NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" Service Index={canFrame.data[3]}"
-    elif op == OPC_SD:
-        if canFrame.data[3] == 0 and canFrame.data[4] == 0:
-            ret = f"SD NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-                  f" Number of Services={canFrame.data[5]}"
-        else:
-            ret = f"SD NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-                  f" Service Index={canFrame.data[3]}" + \
-                  f" Type={VlcbServiceTypes[canFrame.data[4]]}" + \
-                  f" Version={canFrame.data[5]}"
     elif op == OPC_ESD:
         ret = f"ESD NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" Service Index={canFrame.data[3]}" + \
