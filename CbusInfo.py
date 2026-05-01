@@ -93,22 +93,14 @@ VlcbOpCodeDefs = {
             "cond": lambda msg : "count" if msg[3] == 0 and msg[4] == 0 else "service",
             "count": [
                 NodeNumberDef,
-                {
-                    "ignore": 2
-                },
-                {
-                    "bytes": 1,
-                    "name": "Number of Services"
-                }
+                { "ignore": 2 },
+                { "bytes": 1, "name": "Number of Services" }
             ],
             "service": [
                 NodeNumberDef,
                 ServiceIndexDef,
                 ServiceTypeDef,
-                {
-                    "bytes": 1,
-                    "name": "Version"
-                }
+                { "bytes": 1, "name": "Version" }
             ]
         },
         "description": "Response to service discovery request"
@@ -118,18 +110,9 @@ VlcbOpCodeDefs = {
             NodeNumberDef,
             ServiceIndexDef,
             ServiceTypeDef,
-            {
-                "bytes": 1,
-                "name": "Data1"
-            },
-            {
-                "bytes": 1,
-                "name": "Data2"
-            },
-            {
-                "bytes": 1,
-                "name": "Data3"
-            }
+            { "bytes": 1, "name": "Data1" },
+            { "bytes": 1, "name": "Data2" },
+            { "bytes": 1, "name": "Data3" }
         ],
         "description": "Extended response to service discovery request"
     },
