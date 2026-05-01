@@ -94,3 +94,8 @@ class TestCbusInfo(unittest.TestCase):
         self.assertEqual("SD NN=4711 Service Index=3 Type=ID_CAN Version=2",
             describeCbusMessage(CanMessage(op_code=OPC_SD, node_number=4711,
                 parameters=[3, 3, 2])))
+        
+    def test_showCbusMessage_ESD(self):
+        self.assertEqual("ESD NN=4711 Service Index=3 Type=ID_CAN Data1=17 Data2=42 Data3=127",
+            describeCbusMessage(CanMessage(op_code=OPC_ESD, node_number=4711,
+                parameters=[3, 3, 17, 42, 127])))

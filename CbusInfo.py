@@ -48,6 +48,15 @@ EventValueDef = {
     "bytes": 1,
     "name": "Value"
 }
+ServiceIndexDef = {
+    "bytes": 1,
+    "name": "Service Index"
+}
+ServiceTypeDef = {
+    "bytes": 1,
+    "value": lambda v: VlcbServiceTypes[v],
+    "name": "Type"
+}
 
 VlcbOpCodeDefs = {
     OPC_QNN: {
@@ -75,6 +84,10 @@ VlcbOpCodeDefs = {
         ],
         "description": "Response to QNN with node details"
     },
+    OPC_RQSD: {
+        "params": [ NodeNumberDef, ServiceIndexDef ],
+        "description": "Request Service Discovery"
+    },
     OPC_SD: {
         "alt_params": {
             "cond": lambda msg : "count" if msg[3] == 0 and msg[4] == 0 else "service",
@@ -90,15 +103,8 @@ VlcbOpCodeDefs = {
             ],
             "service": [
                 NodeNumberDef,
-                {
-                    "bytes": 1,
-                    "name": "Service Index"
-                },
-                {
-                    "bytes": 1,
-                    "value": lambda v: VlcbServiceTypes[v],
-                    "name": "Type"
-                },
+                ServiceIndexDef,
+                ServiceTypeDef,
                 {
                     "bytes": 1,
                     "name": "Version"
@@ -106,6 +112,26 @@ VlcbOpCodeDefs = {
             ]
         },
         "description": "Response to service discovery request"
+    },
+    OPC_ESD: {
+        "params": [
+            NodeNumberDef,
+            ServiceIndexDef,
+            ServiceTypeDef,
+            {
+                "bytes": 1,
+                "name": "Data1"
+            },
+            {
+                "bytes": 1,
+                "name": "Data2"
+            },
+            {
+                "bytes": 1,
+                "name": "Data3"
+            }
+        ],
+        "description": "Extended response to service discovery request"
     },
     OPC_EVANS: { 
         "params": [ NodeNumberDef, EventNumberDef, EventIndexDef, EventValueDef ],
@@ -211,14 +237,6 @@ def describeCbusMessage(canFrame: CanMessage):
         ret = f"REQEV NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}" + \
               f" Event index={canFrame.data[5]}"
-    elif op == OPC_RQSD:
-        ret = f"RQSD NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Service Index={canFrame.data[3]}"
-    elif op == OPC_ESD:
-        ret = f"ESD NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Service Index={canFrame.data[3]}" + \
-              f" Type={VlcbServiceTypes[canFrame.data[4]]}" + \
-              f" Data={canFrame.data[5]} {canFrame.data[6]} {canFrame.data[7]}"
     # OP-codes with NN and no further data:
     elif op == OPC_RQEVN or op == OPC_WRACK or op == OPC_NERD or op == OPC_NNEVN or op == OPC_NNLRN or op == OPC_NNULN:
         ret = f"{VlcbOpCodes[op]}" + \
