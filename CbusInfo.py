@@ -42,7 +42,7 @@ EventNumberDef = {
 }
 EventIndexDef = {
     "bytes": 1,
-    "name": "Event index"
+    "name": "Event Index"
 }
 EventValueDef = {
     "bytes": 1,
@@ -55,7 +55,7 @@ ServiceIndexDef = {
 ServiceTypeDef = {
     "bytes": 1,
     "value": lambda v: VlcbServiceTypes[v],
-    "name": "Type"
+    "name": "Service Type"
 }
 
 VlcbOpCodeDefs = {

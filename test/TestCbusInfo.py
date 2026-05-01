@@ -76,7 +76,7 @@ class TestCbusInfo(unittest.TestCase):
                 event_number=1234, parameters=[7])))
 
     def test_showCbusMessage_EVANS(self):
-        self.assertEqual("EVANS NN=4711 EN=1234 Event index=7 Value=42",
+        self.assertEqual("EVANS NN=4711 EN=1234 Event Index=7 Value=42",
             describeCbusMessage(CanMessage(op_code=OPC_EVANS, node_number=4711,
                 event_number=1234, parameters=[7, 42])))
 
@@ -91,11 +91,11 @@ class TestCbusInfo(unittest.TestCase):
                 parameters=[0, 0, 7])))
 
     def test_showCbusMessage_SD_CanService(self):
-        self.assertEqual("SD NN=4711 Service Index=3 Type=ID_CAN Version=2",
+        self.assertEqual("SD NN=4711 Service Index=3 Service Type=ID_CAN Version=2",
             describeCbusMessage(CanMessage(op_code=OPC_SD, node_number=4711,
                 parameters=[3, 3, 2])))
         
     def test_showCbusMessage_ESD(self):
-        self.assertEqual("ESD NN=4711 Service Index=3 Type=ID_CAN Data1=17 Data2=42 Data3=127",
+        self.assertEqual("ESD NN=4711 Service Index=3 Service Type=ID_CAN Data1=17 Data2=42 Data3=127",
             describeCbusMessage(CanMessage(op_code=OPC_ESD, node_number=4711,
                 parameters=[3, 3, 17, 42, 127])))
