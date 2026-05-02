@@ -67,6 +67,9 @@ DiagnosticCodeDef = {
 }
 
 VlcbOpCodeDefs = {
+    #
+    # General op-codes
+    #
     OPC_GRSP: {
         "params": [ 
             NodeNumberDef,
@@ -96,6 +99,9 @@ VlcbOpCodeDefs = {
     OPC_WRACK: {
         "params": [ NodeNumberDef ]
     },
+    #
+    # Node management op-codes
+    #
     OPC_QNN: {
         "params": [],
         "description": "Query for online nodes"
@@ -136,6 +142,9 @@ VlcbOpCodeDefs = {
         ],
         "description": "Response to RQNPN"
     },
+    #
+    # Service discovery op-codes
+    #
     OPC_RQSD: {
         "params": [ NodeNumberDef, ServiceIndexDef ],
         "description": "Request Service Discovery"
@@ -168,10 +177,29 @@ VlcbOpCodeDefs = {
         ],
         "description": "Extended response to service discovery request"
     },
+    #
+    # Learn mode op-codes
+    #
+    OPC_NNLRN: {
+        "params": [ NodeNumberDef ]
+    },
+    OPC_NNULN: {
+        "params": [ NodeNumberDef ]
+    },
+    #
+    # Node Variable management op-codes
+    #
+    
+    #
+    # Event management op-codes
+    #
     OPC_EVANS: { 
         "params": [ NodeNumberDef, EventNumberDef, EventIndexDef, EventValueDef ],
         "description": "Response to a request event variable in learn mode" 
     },
+    #
+    # Event op-codes
+    #
     OPC_ACON: {
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Long Event ON"
@@ -212,6 +240,9 @@ VlcbOpCodeDefs = {
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Response Short Event OFF"
     },
+    #
+    # Diagnostics op-codes
+    #
     OPC_RDGN: {
         "params": [ NodeNumberDef, ServiceIndexDef, DiagnosticCodeDef ],
         "description": "Request diagnostics for a service"
@@ -220,6 +251,9 @@ VlcbOpCodeDefs = {
         "params": [ NodeNumberDef, ServiceIndexDef, DiagnosticCodeDef, LongValueDef],
         "description": "Service diagnostic response"        
     },
+    #
+    # Heartbeat op-code
+    #
     OPC_HEARTB: {
         "params": [
             NodeNumberDef,
@@ -277,7 +311,7 @@ def describeCbusMessage(canFrame: CanMessage):
               f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}" + \
               f" Event index={canFrame.data[5]}"
     # OP-codes with NN and no further data:
-    elif op == OPC_RQEVN or op == OPC_NERD or op == OPC_NNEVN or op == OPC_NNLRN or op == OPC_NNULN:
+    elif op == OPC_RQEVN or op == OPC_NERD or op == OPC_NNEVN:
         ret = f"{VlcbOpCodes[op]}" + \
               f" NN={nodeNumber(canFrame.data[1], canFrame.data[2])}"
     # OP-codes with NN and a count
