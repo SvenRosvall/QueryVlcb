@@ -85,6 +85,9 @@ VlcbOpCodeDefs = {
             }
         ]
     },
+    OPC_WRACK: {
+        "params": [ NodeNumberDef ]
+    },
     OPC_QNN: {
         "params": [],
         "description": "Query for online nodes"
@@ -110,18 +113,20 @@ VlcbOpCodeDefs = {
         ],
         "description": "Response to QNN with node details"
     },
+    OPC_RQNPN: {
+        "params": [ 
+            NodeNumberDef,
+            { "bytes": 1, "name": "index" }
+        ],
+        "description": "Request node parameter"
+    },
     OPC_PARAN: {
         "params": [
             NodeNumberDef,
-            {
-                "bytes": 1,
-                "name": "Parameter no"
-            },
-            {
-                "bytes": 1,
-                "name": "Parameter value"
-            }
-        ]
+            { "bytes": 1, "name": "Parameter no" },
+            { "bytes": 1, "name": "Parameter value" }
+        ],
+        "description": "Response to RQNPN"
     },
     OPC_RQSD: {
         "params": [ NodeNumberDef, ServiceIndexDef ],
@@ -248,7 +253,7 @@ def describeCbusMessage(canFrame: CanMessage):
               f" EN={nodeNumber(canFrame.data[3], canFrame.data[4])}" + \
               f" Event index={canFrame.data[5]}"
     # OP-codes with NN and no further data:
-    elif op == OPC_RQEVN or op == OPC_WRACK or op == OPC_NERD or op == OPC_NNEVN or op == OPC_NNLRN or op == OPC_NNULN:
+    elif op == OPC_RQEVN or op == OPC_NERD or op == OPC_NNEVN or op == OPC_NNLRN or op == OPC_NNULN:
         ret = f"{VlcbOpCodes[op]}" + \
               f" NN={nodeNumber(canFrame.data[1], canFrame.data[2])}"
     # OP-codes with NN and a count
@@ -257,7 +262,7 @@ def describeCbusMessage(canFrame: CanMessage):
               f" NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" Count={canFrame.data[3]}"
     # OP-codes with NN and an index
-    elif op == OPC_RQNPN or op == OPC_NVRD:
+    elif op == OPC_NVRD:
         ret = f"{VlcbOpCodes[op]}" + \
               f" NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" index={canFrame.data[3]}"
