@@ -48,6 +48,10 @@ EventValueDef = {
     "bytes": 1,
     "name": "Value"
 }
+LongValueDef = {
+    "bytes": 2,
+    "name": "Value"
+}
 ServiceIndexDef = {
     "bytes": 1,
     "name": "Service Index"
@@ -56,6 +60,10 @@ ServiceTypeDef = {
     "bytes": 1,
     "value": lambda v: VlcbServiceTypes[v],
     "name": "Service Type"
+}
+DiagnosticCodeDef = {
+    "bytes": 1,
+    "name": "Diag code"
 }
 
 VlcbOpCodeDefs = {
@@ -203,6 +211,22 @@ VlcbOpCodeDefs = {
     OPC_ARSOF: {
         "params": [ NodeNumberDef, EventNumberDef ],
         "description": "Response Short Event OFF"
+    },
+    OPC_RDGN: {
+        "params": [ NodeNumberDef, ServiceIndexDef, DiagnosticCodeDef ],
+        "description": "Request diagnostics for a service"
+    },
+    OPC_DGN: {
+        "params": [ NodeNumberDef, ServiceIndexDef, DiagnosticCodeDef, LongValueDef],
+        "description": "Service diagnostic response"        
+    },
+    OPC_HEARTB: {
+        "params": [
+            NodeNumberDef,
+            { "bytes": 1, "name": "Seq" },
+            { "bytes": 1, "name": "Status" },
+            { "bytes": 1, "name": "StatusBits" }
+        ]
     }
 }
 
@@ -272,20 +296,6 @@ def describeCbusMessage(canFrame: CanMessage):
               f" NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" index={canFrame.data[3]}" + \
               f" value={canFrame.data[4]}"
-    elif op == OPC_RDGN:
-        ret = f"RDGN NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Svc index={canFrame.data[3]}" + \
-              f" Diag code={canFrame.data[4]}"
-    elif op == OPC_DGN:
-        ret = f"DGN NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Svc index={canFrame.data[3]}" + \
-              f" Diag code={canFrame.data[4]}" + \
-              f" value={nodeNumber(canFrame.data[5], canFrame.data[6])}"
-    elif op == OPC_HEARTB:
-        ret = f"HEARTB NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Seq={canFrame.data[3]}" + \
-              f" Status={canFrame.data[4]}" + \
-              f" StatusBits={canFrame.data[5]}"
     else:
         ret = f"?? {VlcbOpCodes[canFrame.data[0]]} " + \
               " ".join([f"{b:02X}" for b in canFrame.data[1:canFrame.dlc]])
