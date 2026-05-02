@@ -59,6 +59,32 @@ ServiceTypeDef = {
 }
 
 VlcbOpCodeDefs = {
+    OPC_GRSP: {
+        "params": [ 
+            NodeNumberDef,
+            { 
+                "bytes": 1,
+                "name": "Request Op",
+                "value": lambda v: VlcbOpCodes[v]
+            },
+            ServiceTypeDef,
+            {
+                "bytes": 1,
+                "name": "Result",
+                "value": lambda v: VlcbGrspCodes[v]
+            }
+        ]
+    },
+    OPC_CMDERR: {
+        "params": [
+            NodeNumberDef,
+            {
+                "bytes": 1,
+                "name": "Result",
+                "value": lambda v: VlcbCmdErrs[v]
+            }
+        ]
+    },
     OPC_QNN: {
         "params": [],
         "description": "Query for online nodes"
@@ -83,6 +109,19 @@ VlcbOpCodeDefs = {
             }
         ],
         "description": "Response to QNN with node details"
+    },
+    OPC_PARAN: {
+        "params": [
+            NodeNumberDef,
+            {
+                "bytes": 1,
+                "name": "Parameter no"
+            },
+            {
+                "bytes": 1,
+                "name": "Parameter value"
+            }
+        ]
     },
     OPC_RQSD: {
         "params": [ NodeNumberDef, ServiceIndexDef ],
@@ -190,18 +229,6 @@ def describeCbusMessage(canFrame: CanMessage):
                 value = d["value"](value)
             ret += f" {d["name"]}={value}"
             i += d["bytes"]
-    elif op == OPC_PARAN:
-        ret = f"PARAN NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Parameter no: {canFrame.data[3]}" + \
-              f" Parameter value={canFrame.data[4]}"
-    elif op == OPC_GRSP:
-        ret = f"GRSP NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Request Op={VlcbOpCodes[canFrame.data[3]]}" + \
-              f" Service={VlcbServiceTypes[canFrame.data[4]]}" + \
-              f" Result={VlcbGrspCodes[canFrame.data[5]]}"
-    elif op == OPC_CMDERR:
-        ret = f"CMDERR NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
-              f" Result={VlcbCmdErrs[canFrame.data[3]]}"
     elif op == OPC_REVAL:
         ret = f"REVAL NN={nodeNumber(canFrame.data[1], canFrame.data[2])}" + \
               f" Event index={canFrame.data[3]}" + \

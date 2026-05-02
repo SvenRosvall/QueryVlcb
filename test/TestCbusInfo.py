@@ -41,12 +41,12 @@ class TestCbusInfo(unittest.TestCase):
                 parameters=[MANU_MERG, MTYP_CANPAN, 71])))
 
     def test_showCbusMessage_PARAN(self):
-        self.assertEqual("PARAN NN=4711 Parameter no: 7 Parameter value=12",
+        self.assertEqual("PARAN NN=4711 Parameter no=7 Parameter value=12",
             describeCbusMessage(CanMessage(op_code=OPC_PARAN, node_number=4711,
                 parameters=[7, 12])))
 
     def test_showCbusMessage_GRSP(self):
-        self.assertEqual("GRSP NN=4711 Request Op=REVAL Service=ID_MNS Result=INVALID_MODE",
+        self.assertEqual("GRSP NN=4711 Request Op=REVAL Service Type=ID_MNS Result=INVALID_MODE",
             describeCbusMessage(CanMessage(op_code=OPC_GRSP, node_number=4711,
                 parameters=[OPC_REVAL, SERVICE_ID_MNS, GRSP_INVALID_MODE])))
 
